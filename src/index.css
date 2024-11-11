@@ -1,0 +1,13 @@
+:root {
+  --primary-color: #12f1d4;
+  --secondary-color: #2cd170;
+  --success-color: #124612;
+  --danger-color: #004747;
+  --warning-color: #ffd500;
+  --light-color: #ebebeb;
+  --dark-color: #2c2c2c;
+
+  /* Gradient variables */
+  --primary-gradient: linear-gradient(45deg, #12f1d4, #2cd170);
+  --secondary-gradient: linear-gradient(45deg, #124612, #004747);
+}
