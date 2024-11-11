@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300&family=Quicksand&family=Roboto:wght@100&display=swap");
+
 :root {
   --primary-color: #12f1d4;
   --secondary-color: #2cd170;
@@ -6,8 +8,124 @@
   --warning-color: #ffd500;
   --light-color: #ebebeb;
   --dark-color: #2c2c2c;
+  --dark-color-transparent: #232323d6;
+  --primary-gradient: linear-gradient(45deg, #12f1d4, #2cd170);
+  --primary-gradient-hover: linear-gradient(
+    45deg,
+    #10e6c0,
+    #26c262
+  ); /* Slightly darker for hover */
+  --primary-gradient-active: linear-gradient(
+    45deg,
+    #0cb89b,
+    #209d52
+  ); /* Even darker for active */
+  --button-text-color: var(--dark-color);
 
   /* Gradient variables */
   --primary-gradient: linear-gradient(45deg, #12f1d4, #2cd170);
   --secondary-gradient: linear-gradient(45deg, #124612, #004747);
+  --secondary-gradient-transparent: linear-gradient(
+    45deg,
+    #12461285,
+    #004747c3
+  );
+  --link-color: #2cd170; /* Primary link color */
+  --link-hover-color: #1e9a56; /* Hover color */
+  --link-active-color: #155c36; /* Active color */
+  --link-visited-color: #0f3e24; /* Visited link color */
+}
+
+/* GLOBAL STYLES */
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Nunito", sans-serif;
+  color: var(--primary-color);
+}
+
+.row {
+  font-family: "Nunito", sans-serif;
+  color: var(--primary-color);
+}
+
+body {
+  background: var(--secondary-gradient);
+  background-image: var(--secondary-gradient-transparent),
+    url("/images/background.jpg");
+  background-size: cover;
+  margin: 0;
+}
+
+.dark-container {
+  background-color: var(--dark-color-transparent);
+  color: var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.custom-link-primary {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.custom-link-primary:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
+.custom-link-primary:active {
+  color: var(--link-active-color);
+}
+
+.custom-link-primary:visited {
+  color: var(--link-visited-color);
+}
+
+.custom-button {
+  background: var(--primary-gradient);
+  color: var(--button-text-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease; /* Added transform to transition */
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.custom-button:hover {
+  background: var(--primary-gradient-hover);
+  color: var(--dark-color);
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.custom-button:active {
+  background: var(--primary-gradient-active);
+  transform: scale(1); /* Reset scale on active for a 'press' effect */
+}
+
+.custom-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(18, 241, 212, 0.5); /* Focus ring */
+}
+
+/* Targeting .form-control for React-Bootstrap form elements */
+.form-control {
+  padding: 10px;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  transition: box-shadow 0.3s ease; /* Smooth transition for the shadow */
+}
+
+/* Apply box-shadow when the form control is focused */
+.form-control:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 10px var(--primary-color); /* Add custom box-shadow */
 }
