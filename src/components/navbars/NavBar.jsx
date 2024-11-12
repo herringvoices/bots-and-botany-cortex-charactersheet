@@ -19,7 +19,7 @@ export const NavBar = () => {
       <Navbar expand="md" variant="dark" className="mb-3">
         <Container fluid>
           {/* Brand Logo */}
-          <LinkContainer to="/welcome">
+          <LinkContainer to="/">
             <Navbar.Brand>
               <img
                 src="/images/logo.png"
@@ -56,7 +56,7 @@ export const NavBar = () => {
 
                 {/* Conditional Login/Logout Link */}
                 {isLoggedIn ? (
-                  <Nav.Item className="ms-auto">
+                  <Nav.Item className="logout-item">
                     <Nav.Link
                       as={Link}
                       to="/"
@@ -80,5 +80,3 @@ export const NavBar = () => {
     </>
   );
 };
-
-export default NavBar;
