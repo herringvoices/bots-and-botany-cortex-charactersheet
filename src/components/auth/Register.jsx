@@ -1,12 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { createUser, getUserByUsername } from "../../services/userService";
-import { Form, Button, Container, Overlay, Popover } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Overlay,
+  Popover,
+  Row,
+  Col,
+} from "react-bootstrap";
+import React from "react";
 
 export const Register = (props) => {
   const [user, setUser] = useState({
     username: "",
   });
+  const [showPopover, setShowPopover] = useState(false);
+  const target = useRef(null);
   let navigate = useNavigate();
 
   const registerNewUser = () => {
@@ -30,7 +41,7 @@ export const Register = (props) => {
     getUserByUsername(user.username).then((response) => {
       if (response.length > 0) {
         // Duplicate username. No good.
-        window.alert("Account with that username address already exists");
+        setShowPopover(true);
       } else {
         // Good username, create user.
         registerNewUser();
@@ -42,67 +53,49 @@ export const Register = (props) => {
     const copy = { ...user };
     copy[evt.target.id] = evt.target.value;
     setUser(copy);
+    setShowPopover(false);
   };
 
   return (
-    <Container as="main" className="d-flex flex-column align-items-center">
-      <Form onSubmit={handleRegister} className="w-50 mt-5">
-        <h1>Bots and Botany</h1>
-        <h2>Please Register</h2>
-        <Form.Group controlId="username" className="mb-3">
-          <Form.Control
-            ref={target}
-            type="text"
-            value={user.username}
-            onChange={updateUser}
-            placeholder="Create a username"
-            required
-            autoFocus
-          />
-          <Overlay
-            target={target.current}
-            show={showPopover}
-            placement="bottom"
-          >
-            <Popover>
-              <Popover.Body>
-                Account with that username already exists.
-              </Popover.Body>
-            </Popover>
-          </Overlay>
-        </Form.Group>
-
-        <Button variant="info" type="submit">
-          Register
-        </Button>
-      </Form>
+    <Container as="main">
+      <Row className="dark-container text-center mt-5">
+        <Col md={{ span: 6, offset: 3 }}>
+          <Form onSubmit={handleRegister} className="mt-3">
+            <h1>Bots and Botany</h1>
+            <h2>Please Register</h2>
+            <Form.Group controlId="username" className="mb-3">
+              <Form.Control
+                ref={target}
+                type="text"
+                value={user.username}
+                onChange={updateUser}
+                placeholder="Create a username"
+                required
+                autoFocus
+              />
+              <Overlay
+                target={target.current}
+                show={showPopover}
+                placement="bottom"
+              >
+                <Popover>
+                  <Popover.Body>
+                    Account with that username already exists.
+                  </Popover.Body>
+                </Popover>
+              </Overlay>
+            </Form.Group>
+            <Button type="submit" className="custom-button">
+              Register
+            </Button>
+          </Form>
+          <section className="mt-3 mb-3 text-center">
+            <Link className="custom-link-primary" to="/login">
+              back to sign-in
+            </Link>
+          </section>
+        </Col>
+      </Row>
     </Container>
-
-    // <main style={{ textAlign: "center" }}>
-    //   <form className="form-login" onSubmit={handleRegister}>
-    //     <h1>Bots and Botany</h1>
-    //     <h2>Please Register</h2>
-    //     <fieldset>
-    //       <div className="form-group">
-    //         <input
-    //           onChange={updateUser}
-    //           type="text"
-    //           id="username"
-    //           className="form-control"
-    //           placeholder="Create a username"
-    //           required
-    //         />
-    //       </div>
-    //     </fieldset>
-
-    //     <fieldset>
-    //       <div className="form-group">
-    //         <button className="login-btn btn-info" type="submit">
-    //           Register
-    //         </button>
-    //       </div>
-    //     </fieldset>
-    //   </form>
-    // </main>
   );
 };

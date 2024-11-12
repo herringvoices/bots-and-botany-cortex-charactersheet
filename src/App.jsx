@@ -1,10 +1,10 @@
-import "./App.css";
-
+import "./app.css";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
+import { ApplicationViews } from "./views/ApplicationViews";
 import { Authorized } from "./views/Authorized";
-import React from "react";
 
 export const App = () => {
   return (
@@ -17,7 +17,7 @@ export const App = () => {
           //check if the user is authorized first
           <Authorized>
             {/* ApplicationViews is the child component of authorized */}
-            <Login />
+            <ApplicationViews />
           </Authorized>
         }
       />
