@@ -39,7 +39,7 @@ export const ApplicationViews = () => {
           />
         </Route>
         <Route
-          path="characters/create/:characterId"
+          path="characters/create"
           element={<CharacterCreate currentUser={currentUser} />}
         />
         <Route

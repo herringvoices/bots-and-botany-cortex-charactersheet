@@ -10,8 +10,8 @@
   --danger-color: #004747;
   --warning-color: #ffd500;
   --light-color: #ebebeb;
-  --dark-color: #2c2c2c;
-  --dark-color-transparent: #232323d6;
+  --dark-color: #1c1c1c;
+  --dark-color-transparent: #1c1c1cd6;
 
   --primary-gradient: linear-gradient(45deg, #12f1d4, #2cd170);
   --primary-gradient-hover: linear-gradient(
@@ -41,15 +41,29 @@
 }
 
 /* Apply Nova Square Globally */
+
 body {
   font-family: "Nova Square", sans-serif;
   color: var(--primary-color);
   background: var(--secondary-gradient);
   background-image: var(--secondary-gradient-transparent),
     url("/images/background.jpg");
-  background-size: cover; /* Keep the entire image visible */
+  background-size: auto;
   background-blend-mode: multiply;
   margin: 0;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-family: "Nova Square", sans-serif;
+    color: var(--primary-color);
+    background: var(--secondary-gradient);
+    background-image: var(--secondary-gradient-transparent),
+      url("/images/background.jpg");
+    background-size: cover; /* Keep the entire image visible */
+    background-blend-mode: multiply;
+    margin: 0;
+  }
 }
 
 /* Reset Some Elements to Use Global Styles */
