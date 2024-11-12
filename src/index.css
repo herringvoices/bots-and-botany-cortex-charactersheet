@@ -102,7 +102,7 @@ h2 {
   color: var(--button-text-color);
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease; /* Added transform to transition */
