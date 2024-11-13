@@ -1,0 +1,49 @@
+.custom-nav-button {
+  background-color: #00000000;
+  border: 0;
+  color: var(--primary-color);
+  transition: transform 0.3s ease;
+}
+
+.custom-nav-button:hover {
+  background-color: #00000000;
+  border: 0;
+  color: var(--primary-color);
+  transform: scale(1.5);
+}
+
+.custom-nav-button:active {
+  background-color: #00000000 !important;
+  border: 0;
+  color: var(--primary-color);
+  transform: scale(1.5);
+}
+
+.bottom-navbar {
+  height: 2.25rem;
+  transform: scale(1.25);
+}
+
+.species-select-image {
+  width: 70%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--primary-color);
+  border: solid var(--primary-color);
+}
+
+.background-select-image {
+  width: 10em;
+  height: 10em;
+}
+
+.form-select {
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  cursor: pointer;
+  border: solid var(--primary-color);
+}
+
+.form-select:focus {
+  border: solid var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
+}
