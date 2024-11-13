@@ -43,11 +43,17 @@ export const CharacterCreate = ({ currentUser }) => {
   return (
     <>
       <Container as="main">
-        <Row className="dark-container text-center mt-5">
+        <Row className="dark-container text-center mt-3 mb-5 p-3">
           {step === 1 ? (
             <NameSelect character={character} setCharacter={setCharacter} />
           ) : step === 2 ? (
-            <SpeciesSelect setKindredDistinction={setKindredDistinction} />
+            <>
+            <h1>Species Selection</h1>
+              <SpeciesSelect
+                kindredDistinction={kindredDistinction}
+                setKindredDistinction={setKindredDistinction}
+              />
+            </>
           ) : step === 3 ? (
             <BackgroundSelect setKindredDistinction={setKindredDistinction} />
           ) : (
@@ -55,6 +61,8 @@ export const CharacterCreate = ({ currentUser }) => {
           )}
         </Row>
       </Container>
+
+      {/* NavBar along the bottom */}
       <Navbar fixed="bottom" className="justify-content-around bottom-navbar">
         <Nav>
           {step > 1 ? (

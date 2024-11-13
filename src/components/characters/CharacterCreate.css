@@ -14,5 +14,24 @@
 
 .bottom-navbar {
   height: 2.25rem;
-  transform: scale(1.25)
+  transform: scale(1.25);
+}
+
+.species-select-image {
+  width: 70%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--primary-color);
+  border: solid var(--primary-color);
+}
+
+.form-select {
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  cursor: pointer;
+  border: solid var(--primary-color);
+}
+
+.form-select:focus {
+  border: solid var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
 }
