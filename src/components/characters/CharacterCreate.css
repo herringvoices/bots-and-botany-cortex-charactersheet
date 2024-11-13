@@ -1,0 +1,18 @@
+.custom-nav-button {
+  background-color: #00000000;
+  border: 0;
+  color: var(--primary-color);
+  transition: transform 0.3s ease;
+}
+
+.custom-nav-button:hover {
+  background-color: #00000000;
+  border: 0;
+  color: var(--primary-color);
+  transform: scale(1.5);
+}
+
+.bottom-navbar {
+  height: 2.25rem;
+  transform: scale(1.25)
+}
