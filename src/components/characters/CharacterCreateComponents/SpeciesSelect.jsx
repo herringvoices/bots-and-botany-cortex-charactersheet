@@ -10,6 +10,7 @@ import {
 export const SpeciesSelect = ({
   kindredDistinction,
   setKindredDistinction,
+  setReady,
 }) => {
   const [species, setSpecies] = useState([]);
   const [selectedSpecies, setSelectedSpecies] = useState(null);
@@ -52,6 +53,14 @@ export const SpeciesSelect = ({
       setSelectedValue(foundValue);
     }
   }, [species, selectedSpecies, sfx, speciesSfx]);
+
+  useEffect(() => {
+    if (kindredDistinction.speciesId) {
+      setReady(2);
+    } else {
+      setReady(1);
+    }
+  }, [kindredDistinction]);
 
   return (
     <>

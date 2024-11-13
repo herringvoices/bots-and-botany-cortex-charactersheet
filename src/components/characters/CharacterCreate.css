@@ -12,6 +12,13 @@
   transform: scale(1.5);
 }
 
+.custom-nav-button:active {
+  background-color: #00000000 !important;
+  border: 0;
+  color: var(--primary-color);
+  transform: scale(1.5);
+}
+
 .bottom-navbar {
   height: 2.25rem;
   transform: scale(1.25);
@@ -22,6 +29,11 @@
   border-radius: 8px;
   box-shadow: 0 0 10px var(--primary-color);
   border: solid var(--primary-color);
+}
+
+.background-select-image {
+  width: 10em;
+  height: 10em;
 }
 
 .form-select {

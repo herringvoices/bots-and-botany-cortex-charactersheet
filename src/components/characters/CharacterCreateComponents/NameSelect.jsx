@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
-export const NameSelect = ({character, setCharacter}) => {
+export const NameSelect = ({character, setCharacter, setReady}) => {
+
+  useEffect(() => {
+    if (character.name && character.pronouns) {
+      setReady(1);
+    } else {
+      setReady(0);
+    }
+  }, [character]);
+  
   return (
     <Col md={{ span: 6, offset: 3 }}>
       <section className="mt-3">
