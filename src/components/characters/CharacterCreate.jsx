@@ -70,9 +70,11 @@ export const CharacterCreate = ({ currentUser }) => {
             <>
               <h1>Species Selection</h1>
               <SpeciesSelect
+                setCharacter={setCharacter}
                 kindredDistinction={kindredDistinction}
                 setKindredDistinction={setKindredDistinction}
                 setReady={setReady}
+                character={character}
               />
             </>
           ) : step === 3 ? (

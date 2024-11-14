@@ -1,4 +1,32 @@
-import React from "react";
-export const CharacterList = () => {
-  return <>CharacterList</>;
+import React, { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { getCharactersByUserId } from "../../services/Service";
+import { CharacterItem } from "./CharacterItem";
+import "./CharacterList.css";
+export const CharacterList = ({ currentUser }) => {
+  const [characters, setCharacters] = useState([]);
+
+  const getAndSetCharacters = () => {
+    getCharactersByUserId(currentUser.id).then(setCharacters);
+  };
+  useEffect(() => {
+    getAndSetCharacters();
+  }, [currentUser]);
+
+  return (
+    <Container as="main">
+      <Row className="dark-container text-center mt-5">
+        <Col md={{ span: 6, offset: 3 }}>
+          {characters.map((item) => (
+            <CharacterItem
+            key={item.id}
+              getAndSetCharacters={getAndSetCharacters}
+              character={item}
+              
+            />
+          ))}
+        </Col>
+      </Row>
+    </Container>
+  );
 };
