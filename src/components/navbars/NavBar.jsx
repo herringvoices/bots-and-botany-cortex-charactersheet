@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   Nav,
@@ -13,6 +13,10 @@ import "./NavBar.css";
 export const NavBar = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("bnb_user");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -31,11 +35,13 @@ export const NavBar = () => {
           </LinkContainer>
 
           {/* Toggle button for Offcanvas */}
-          <Navbar.Toggle aria-controls="offcanvasNavbar" />
+          <Navbar.Toggle aria-controls="offcanvasNavbar" onClick={handleShow} />
           <Navbar.Offcanvas
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
             placement="end"
+            show={show}
+            onHide={handleClose}
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel">
@@ -46,10 +52,10 @@ export const NavBar = () => {
               <Nav className="justify-content-start flex-grow-1 pe-3">
                 {/* Characters Dropdown */}
                 <NavDropdown title="Characters" id="characters-dropdown">
-                  <LinkContainer to="/characters/create">
+                  <LinkContainer onClick={handleClose} to="/characters/create">
                     <NavDropdown.Item>Create</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/characters/view">
+                  <LinkContainer onClick={handleClose} to="/characters/view">
                     <NavDropdown.Item>View</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
@@ -62,6 +68,7 @@ export const NavBar = () => {
                       to="/"
                       onClick={() => {
                         localStorage.removeItem("bnb_user");
+                        handleClose(); // Close the offcanvas
                         navigate("/", { replace: true });
                       }}
                       className="navbar-link"
