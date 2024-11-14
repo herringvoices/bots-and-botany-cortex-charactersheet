@@ -1,0 +1,56 @@
+.distinction-item {
+  background: var(--primary-gradient);
+  margin: 0.5em;
+  border-radius: 8px;
+  padding: 1em 0;
+}
+
+.diamond {
+  width: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust as needed */
+  background-color: var(
+    --dark-color
+  ); /* Change to your desired background color */
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg); /* Rotates the square to appear as a diamond */
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 auto; /* Centers the diamond in the column */
+}
+
+/* Rotate the text back to normal */
+.diamond > * {
+  transform: rotate(-45deg);
+}
+
+.btn-edit {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-edit:hover {
+  background-color: var(--secondary-color);
+  color: var(--dark-color);
+  border: none;
+  transform: scale(1.25);
+}
+
+.btn-plus {
+  background-color: #00000000;
+  color: var(--dark-color);
+  border: none;
+  font-size: 1.5em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-plus:hover {
+  background-color: #00000000;
+  color: var(--dark-color);
+  border: none;
+  transform: scale(1.25);
+}
