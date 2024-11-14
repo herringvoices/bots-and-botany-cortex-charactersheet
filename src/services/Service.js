@@ -163,3 +163,83 @@ export const deleteCharacter = (character) => {
       console.error("Error deleting character:", error);
     });
 };
+export const getCharacterById = (id) => {
+  return fetch(`${api}/characters/${id}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data; // This returns the fetched character data
+    })
+    .catch((error) => {
+      console.error("Error fetching character:", error);
+    });
+};
+
+export const getKindredDistinctionByCharacterId = (characterId) => {
+  return fetch(
+    `${api}/kindredDistinctions?characterId=${characterId}&_expand=species&_expand=background`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data; // Returns the fetched kindredDistinctions data with species and background expanded
+    })
+    .catch((error) => {
+      console.error("Error fetching kindredDistinctions:", error);
+    });
+};
+
+export const updateKindredDistinction = (kindredDistinction) => {
+  return fetch(`${api}/kindredDistinctions/${kindredDistinction.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(kindredDistinction),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update kindredDistinction. Status: ${response.status}`
+        );
+      }
+      return response.json(); // Assuming API returns a response body
+    })
+    .then((data) => {
+      console.log("KindredDistinction updated successfully:", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error updating kindredDistinction:", error);
+    });
+};
+
+export const updateCharacter = (character) => {
+  return fetch(`${api}/characters/${character.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(character),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to update character: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((updatedCharacter) => {
+      return updatedCharacter; // Return the updated character data
+    })
+    .catch((error) => {
+      console.error("Error updating character:", error);
+    });
+};
