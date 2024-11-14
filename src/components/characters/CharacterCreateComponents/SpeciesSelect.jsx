@@ -11,6 +11,8 @@ export const SpeciesSelect = ({
   kindredDistinction,
   setKindredDistinction,
   setReady,
+  setCharacter,
+  character,
 }) => {
   const [species, setSpecies] = useState([]);
   const [selectedSpecies, setSelectedSpecies] = useState(null);
@@ -20,7 +22,7 @@ export const SpeciesSelect = ({
   const [values, setValues] = useState([]);
   const [selectedValue, setSelectedValue] = useState([]);
 
-  // Fetch species once when the component mounts.
+  // Fetch species, sfx, speciesSfx, and values once when the component mounts.
   useEffect(() => {
     getSpecies().then(setSpecies);
     getSFX().then(setSfx);
@@ -28,12 +30,19 @@ export const SpeciesSelect = ({
     getValues().then(setValues);
   }, []);
 
-  // Fetch species once when the component mounts.
+  // Set selected species when kindredDistinction.speciesId or species change.
   useEffect(() => {
     setSelectedSpecies(
       species.find((item) => item.id === parseInt(kindredDistinction.speciesId))
     );
   }, [kindredDistinction, species]);
+
+  // Update character image when selectedSpecies changes and is defined.
+  useEffect(() => {
+    if (selectedSpecies) {
+      setCharacter({ ...character, image: selectedSpecies.image });
+    }
+  }, [selectedSpecies]);
 
   useEffect(() => {
     if (speciesSfx) {
@@ -43,7 +52,6 @@ export const SpeciesSelect = ({
       const sfxOptions = sfx.filter((item) =>
         selectedSSFX.some((selected) => selected.sfxId === item.id)
       );
-
       setSelectedSpeciesSfx(sfxOptions);
     }
     if (values) {
@@ -55,11 +63,7 @@ export const SpeciesSelect = ({
   }, [species, selectedSpecies, sfx, speciesSfx]);
 
   useEffect(() => {
-    if (kindredDistinction.speciesId) {
-      setReady(2);
-    } else {
-      setReady(1);
-    }
+    setReady(kindredDistinction.speciesId ? 2 : 1);
   }, [kindredDistinction]);
 
   return (

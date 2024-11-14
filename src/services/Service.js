@@ -123,3 +123,43 @@ export const postKindredDistinction = (kindredDistinctionObject) => {
       console.error("Error posting kindred distinction:", error);
     });
 };
+
+export const getCharactersByUserId = (userId) => {
+  return fetch(`${api}/characters?userId=${userId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data; // This returns the fetched characters data for the specified userId
+    })
+    .catch((error) => {
+      console.error("Error fetching characters:", error);
+    });
+};
+
+export const deleteCharacter = (character) => {
+  return fetch(`${api}/characters/${character.id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete character. Status: ${response.status}`
+        );
+      }
+      return response.json(); // Assuming the API returns a response body; if not, remove this line
+    })
+    .then((data) => {
+      console.log("Character deleted successfully:", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error deleting character:", error);
+    });
+};
