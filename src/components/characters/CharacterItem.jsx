@@ -1,15 +1,36 @@
 import React from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Image, Row } from "react-bootstrap";
 import { deleteCharacter } from "../../services/Service";
-export const CharacterItem = ({ character }) => {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+
+export const CharacterItem = ({ character, getAndSetCharacters }) => {
   return (
-    <Container as="main">
-      <Row className="dark-container text-center mt-5">
-        <Col md={{ span: 6, offset: 3 }}>
+    <Row className="mb-3 dark-container text-center mt-3 character-list-item">
+      <Col md={{ span: 2 }} className="image-column">
+        <Link to={`/characters/view/${character.id}`} className="hover-link">
+          <Image
+            src={character.image}
+            alt={`Image of ${character.name}`}
+            roundedCircle
+          />
+        </Link>
+      </Col>
+
+      <Col md={{ span: 8 }} className="character-name my-auto text-start">
+        <Link to={`/characters/view/${character.id}`} className="hover-link">
           {character.name}
-          <Button onClick={() => deleteCharacter(character)}>DELETE</Button>
-        </Col>
-      </Row>
-    </Container>
+        </Link>
+      </Col>
+
+      <Col md={{ span: 2 }} className="character-name my-auto text-start">
+        <Button
+          className="trash-button"
+          onClick={() => deleteCharacter(character).then(getAndSetCharacters)}
+        >
+          <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+        </Button>
+      </Col>
+    </Row>
   );
 };

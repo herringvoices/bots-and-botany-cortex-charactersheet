@@ -1,0 +1,51 @@
+.character-list-item {
+  background: var(--primary-gradient);
+}
+
+.character-name {
+  color: var(--dark-color);
+  font-size: 2em;
+  margin-left: 3px;
+  margin-right: -3px;
+}
+
+.trash-button {
+  background-color: #00000000;
+  border: none;
+  color: var(--primary);
+  font-size: 1em;
+  transition: transform 0.3s ease;
+}
+
+.trash-button:hover {
+  transform: scale(1.05);
+}
+
+.image-column {
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.image-column img {
+  width: 90%;
+  height: auto;
+  margin: 10px;
+  border: solid var(--primary-color);
+}
+
+a {
+  display: contents; /* Makes the link itself disappear, while keeping its children visible */
+  text-decoration: none;
+  color: inherit;
+}
+
+.hover-link {
+  display: inline-block; /* Allows transform scaling */
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits text color */
+  transition: transform 0.3s ease; /* Smooth scaling transition */
+}
+
+.hover-link:hover {
+  transform: scale(1.05); /* Zooms slightly on hover */
+}

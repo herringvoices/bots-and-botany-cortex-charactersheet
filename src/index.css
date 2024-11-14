@@ -51,6 +51,7 @@ body {
   background-size: auto;
   background-blend-mode: multiply;
   margin: 0;
+  font-size: 1.25em;
 }
 
 @media (min-width: 768px) {
@@ -83,7 +84,6 @@ h2 {
 }
 
 ul {
-  
   padding: 0 6px;
   margin: 0 3px;
 }
@@ -125,7 +125,7 @@ ul {
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease; /* Added transform to transition */
+  transition: background 0.3s ease, transform 0.3s ease; 
   display: inline-block;
   text-align: center;
   text-decoration: none;
