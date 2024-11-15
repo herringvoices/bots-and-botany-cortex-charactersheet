@@ -4,7 +4,7 @@ import { NameSelect } from "./CharacterCreateComponents/NameSelect";
 import { SpeciesSelect } from "./CharacterCreateComponents/SpeciesSelect";
 import { BackgroundSelect } from "./CharacterCreateComponents/BackgroundSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./CharacterCreate.css";
+import "./CharacterCreate.scss";
 import "animate.css";
 import { postCharacter, postKindredDistinction } from "../../services/Service";
 import { useNavigate } from "react-router-dom";

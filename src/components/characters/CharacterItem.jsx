@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export const CharacterItem = ({ character, getAndSetCharacters }) => {
   return (
-    <Row className="mb-3 dark-container text-center mt-3 character-list-item">
+    <Row className="mb-3 dark-container text-center mt-3 character-list-item text-center mx-auto">
       <Col md={{ span: 2 }} className="image-column">
         <Link to={`/characters/view/${character.id}`} className="hover-link">
           <Image

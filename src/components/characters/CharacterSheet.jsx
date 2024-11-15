@@ -4,11 +4,11 @@ import {
   getCharacterById,
   getKindredDistinctionByCharacterId,
 } from "../../services/Service";
-import { Col, Container, Image, Row } from "react-bootstrap";
-import "./CharacterSheet.css";
+import { Accordion, Col, Container, Image, Row } from "react-bootstrap";
+import "./CharacterSheet.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DistinctionItem } from "./DistinctionItem";
-import { CharacterHeader } from "./ChracterHeader";
+import { DistinctionItem } from "./CSComponents/DistinctionItem";
+import { CharacterHeader } from "./CSComponents/ChracterHeader";
 
 export const CharacterSheet = ({ currentUser }) => {
   let { characterId } = useParams();
@@ -45,17 +45,20 @@ export const CharacterSheet = ({ currentUser }) => {
   return (
     <Container as="main">
       <CharacterHeader character={character} setCharacter={setCharacter} />
-      <Row className="dark-container text-center mt-5">
-        <Row>
-          <h2>Distinctions</h2>
-        </Row>
-        <DistinctionItem
-          expandedKindredDistinction={expandedKindredDistinction}
-          kindredDistinction={kindredDistinction}
-          setKindredDistinction={setKindredDistinction}
-          getAndSetState={getAndSetState}
-        />
-      </Row>
+
+      <Accordion eventKey="0" alwaysOpen>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Distinctions</Accordion.Header>
+          <Accordion.Body className="dark-container text-center">
+            <DistinctionItem
+              expandedKindredDistinction={expandedKindredDistinction}
+              kindredDistinction={kindredDistinction}
+              setKindredDistinction={setKindredDistinction}
+              getAndSetState={getAndSetState}
+            />
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     </Container>
   );
 };

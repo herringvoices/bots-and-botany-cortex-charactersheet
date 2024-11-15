@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import "./NavBar.css";
+import "./NavBar.scss";
 
 export const NavBar = () => {
   const navigate = useNavigate();
@@ -51,7 +51,11 @@ export const NavBar = () => {
             <Offcanvas.Body>
               <Nav className="justify-content-start flex-grow-1 pe-3">
                 {/* Characters Dropdown */}
-                <NavDropdown title="Characters" id="characters-dropdown">
+                <NavDropdown
+                  title="Characters"
+                  id="characters-dropdown"
+                  bg="dark"
+                >
                   <LinkContainer onClick={handleClose} to="/characters/create">
                     <NavDropdown.Item>Create</NavDropdown.Item>
                   </LinkContainer>

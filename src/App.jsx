@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Login } from "./components/auth/Login";
@@ -7,9 +7,7 @@ import { ApplicationViews } from "./views/ApplicationViews";
 import { Authorized } from "./views/Authorized";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-library.add(
-  fas,
-);
+library.add(fas);
 
 export const App = () => {
   return (

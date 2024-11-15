@@ -1,44 +1,11 @@
 /* Import Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Nova+Square&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300&family=Quicksand&family=Roboto:wght@100&display=swap");
+// Import your custom variables first
+@import "./variables";
 
-/* Root Variables */
-:root {
-  --primary-color: #12f1d3;
-  --secondary-color: #2cd170;
-  --success-color: #124612;
-  --danger-color: #004747;
-  --warning-color: #ffd500;
-  --light-color: #ebebeb;
-  --dark-color: #1c1c1c;
-  --dark-color-transparent: #1c1c1cd6;
-
-  --primary-gradient: linear-gradient(45deg, #12f1d4, #2cd170);
-  --primary-gradient-hover: linear-gradient(
-    45deg,
-    #10e6c0,
-    #26c262
-  ); /* Slightly darker for hover */
-  --primary-gradient-active: linear-gradient(
-    45deg,
-    #0cb89b,
-    #209d52
-  ); /* Even darker for active */
-
-  --secondary-gradient: linear-gradient(45deg, #124612, #004747);
-  --secondary-gradient-transparent: linear-gradient(
-    45deg,
-    #12461285,
-    #004747c3
-  );
-
-  --button-text-color: var(--dark-color);
-
-  --link-color: #2cd170; /* Primary link color */
-  --link-hover-color: #1e9a56; /* Hover color */
-  --link-active-color: #155c36; /* Active color */
-  --link-visited-color: #2cd170; /* Visited link color */
-}
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap";
 
 /* Apply Nova Square Globally */
 

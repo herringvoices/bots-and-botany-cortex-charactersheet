@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateKindredDistinction } from "../../services/Service";
+import { updateKindredDistinction } from "../../../services/Service";
 
 export const DistinctionItem = ({
   expandedKindredDistinction,
@@ -66,7 +66,7 @@ export const DistinctionItem = ({
         </Col>
         <Col xs={{ offset: 2, span: 1 }} className="p-2 text-end">
           {edit ? (
-            <Button className="btn-edit" onClick={handleSave}>
+            <Button className="btn-edit" onClick={handleSave} active>
               <FontAwesomeIcon icon="fa-solid fa-floppy-disk" />
             </Button>
           ) : (

@@ -1,0 +1,158 @@
+@import "../../variables.scss";
+
+.distinction-item {
+  background: var(--primary-gradient) !important;
+  margin: 0.5em !important;
+  border-radius: 8px !important;
+  padding: 1em 0 !important;
+}
+
+.diamond {
+  width: 50px !important; /* Adjust as needed */
+  height: 50px !important; /* Adjust as needed */
+  background-color: var(
+    --dark-color
+  ) !important; /* Change to your desired background color */
+  color: var(--primary-color) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: rotate(
+    45deg
+  ) !important; /* Rotates the square to appear as a diamond */
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  margin: 0 auto !important; /* Centers the diamond in the column */
+}
+
+/* Rotate the text back to normal */
+.diamond > * {
+  transform: rotate(-45deg) !important;
+}
+
+.btn-edit {
+  background-color: var(--primary-color) !important;
+  color: var(--dark-color) !important;
+  border: none !important;
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
+}
+
+.btn-edit:hover {
+  background-color: var(--secondary-color) !important;
+  color: var(--dark-color) !important;
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+.btn-edit.active {
+  background-color: var(--secondary-color) !important;
+  color: var(--dark-color) !important;
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+.btn-plus {
+  background-color: #00000000 !important;
+  color: var(--dark-color) !important;
+  border: none !important;
+  font-size: 1.5em !important;
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
+}
+
+.btn-plus:hover {
+  background-color: #00000000 !important;
+  color: var(--dark-color) !important;
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+.btn-plus:active {
+  background-color: #00000000 !important;
+  color: var(--dark-color) !important;
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+.accordion {
+  background-color: var(--dark-color); // Background for the entire Accordion
+  // Add a border
+  border-radius: 8px;
+  margin-top: 5px;
+  box-shadow: 0 0 5px var(--primary-color);
+
+  .accordion-item {
+    background-color: var(
+      --secondary-gradient-transparent
+    ); // Gradient for items
+    border: none;
+    
+
+    &.active {
+      // Style for active items
+      background-color: var(--primary-color);
+      
+    }
+  }
+
+  .accordion-header {
+    background-color: #00000000 !important;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    padding: 0.75rem 1rem;
+
+    &:hover {
+      background-color: var(--primary-gradient-hover);
+      color: var(--dark-color);
+    }
+  }
+
+  .accordion-body {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    border-top: 1px solid var(--primary-color);
+    padding: 1rem;
+  }
+}
+
+.accordion-button {
+  background-color: var(--primary-color); // Background color of the button
+  color: var(--primary-color); // Text color
+  border: solid 1px var(--primary-color) !important;
+  font-size: 1.25rem; // Adjust font size
+  padding: 0.75rem 1rem; // Adjust padding
+  box-shadow: 0 0 5px 2px var(--primary-color);
+  // Rounded corners and shadow
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: var(--primary-gradient-hover); // Hover effect
+    color: var(--dark-color); // Text color on hover
+  }
+
+  &:focus {
+    outline: none; // Remove focus outline
+    box-shadow: 0 0 5px 2px var(--primary-color); // Add a focus glow
+  }
+
+  &::after {
+    transform: scale(1.2); // Make the icon larger
+  }
+
+  // When the accordion is expanded
+  &.collapsed {
+    background-color: var(
+      --primary-gradient-active
+    ) !important; // Background for collapsed state
+    color: var(--light-color); // Text color for collapsed state
+  }
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(
+    --primary-color
+  ) !important; // Background for active state
+  color: var(--dark-color) !important; // Text color for active state
+  border: none !important;
+  box-shadow: none !important;
+
+}

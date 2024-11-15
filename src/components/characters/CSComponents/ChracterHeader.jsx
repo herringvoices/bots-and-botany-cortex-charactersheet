@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Col, Row, Image, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateCharacter } from "../../services/Service";
+import { updateCharacter } from "../../../services/Service";
 
 export const CharacterHeader = ({ character, setCharacter }) => {
   const [edit, setEdit] = useState(false);

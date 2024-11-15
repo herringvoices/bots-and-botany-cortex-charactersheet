@@ -1,0 +1,50 @@
+.custom-nav-button {
+  background-color: #00000000 !important;
+  border: 0 !important;
+  color: var(--primary-color) !important;
+  transition: transform 0.3s ease !important;
+  font-size: 1em !important;
+}
+
+.custom-nav-button:hover {
+  background-color: #00000000 !important;
+  border: 0 !important;
+  color: var(--primary-color) !important;
+  transform: scale(1.5) !important;
+}
+
+.custom-nav-button:active {
+  background-color: #00000000 !important;
+  border: 0 !important;
+  color: var(--primary-color) !important;
+  transform: scale(1.5) !important;
+}
+
+.bottom-navbar {
+  height: 3.5rem !important;
+  transform: scale(1.25) !important;
+}
+
+.species-select-image {
+  width: 70% !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 10px var(--primary-color) !important;
+  border: solid var(--primary-color) !important;
+}
+
+.background-select-image {
+  width: 10em !important;
+  height: 10em !important;
+}
+
+.form-select {
+  background-color: var(--dark-color) !important;
+  color: var(--primary-color) !important;
+  cursor: pointer !important;
+  border: solid var(--primary-color) !important;
+}
+
+.form-select:focus {
+  border: solid var(--primary-color) !important;
+  box-shadow: 0 0 10px var(--primary-color) !important;
+}
