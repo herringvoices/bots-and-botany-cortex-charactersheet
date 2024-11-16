@@ -2,9 +2,17 @@
 
 .distinction-item {
   background: var(--primary-gradient) !important;
-  margin: 0.5em !important;
+  margin: 0.5em;
   border-radius: 8px !important;
   padding: 1em 0 !important;
+  box-sizing: border-box !important; /* Ensure padding stays inside the element */
+}
+
+.flex-row {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next row */
+  justify-content: space-around; /* Adds equal space around each item */
+  gap: 1em; /* Adds spacing between rows (optional) */
 }
 
 .diamond {
@@ -85,12 +93,10 @@
       --secondary-gradient-transparent
     ); // Gradient for items
     border: none;
-    
 
     &.active {
       // Style for active items
       background-color: var(--primary-color);
-      
     }
   }
 
@@ -154,5 +160,4 @@
   color: var(--dark-color) !important; // Text color for active state
   border: none !important;
   box-shadow: none !important;
-
 }

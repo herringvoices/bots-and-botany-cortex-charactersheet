@@ -4,15 +4,21 @@ import { NameSelect } from "./CharacterCreateComponents/NameSelect";
 import { SpeciesSelect } from "./CharacterCreateComponents/SpeciesSelect";
 import { BackgroundSelect } from "./CharacterCreateComponents/BackgroundSelect";
 import { VocationSelect } from "./CharacterCreateComponents/VocationSelect";
+import { AttributeSelect } from "./CharacterCreateComponents/AttributeSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CharacterCreate.scss";
 import "animate.css";
 import { postCharacter, postKindredDistinction } from "../../services/Service";
+
 import {
   postVocationDistinction,
-  postQuirkDistinction, // Added quirk post
+  postQuirkDistinction,
 } from "../../services/distinctionsService";
 import { useNavigate } from "react-router-dom";
+import {
+  getAttributes,
+  postCharacterAttribute,
+} from "../../services/attributeService";
 
 export const CharacterCreate = ({ currentUser }) => {
   const [step, setStep] = useState(1);
@@ -20,6 +26,8 @@ export const CharacterCreate = ({ currentUser }) => {
   const [kindredDistinction, setKindredDistinction] = useState({});
   const [vocationDistinction, setVocationDistinction] = useState({});
   const [quirkDistinction, setQuirkDistinction] = useState({});
+  const [characterAttributes, setCharacterAttributes] = useState([]);
+  const [pointsAvailable, setPointsAvailable] = useState(11); // Initialize points available
   const [ready, setReady] = useState(0);
   const navigate = useNavigate();
 
@@ -53,32 +61,52 @@ export const CharacterCreate = ({ currentUser }) => {
       quirkId: 0,
       dieSize: 8,
     });
+
+    // Fetch attributes and initialize characterAttributes
+    getAttributes()
+      .then((attributes) => {
+        const initializedAttributes = attributes.map((attr) => ({
+          ...attr,
+          characterId: 0,
+          dieSize: 4,
+        }));
+        setCharacterAttributes(initializedAttributes);
+      })
+      .catch((error) => console.error("Error fetching attributes:", error));
   }, [currentUser]);
 
   const handleSubmit = (
     character,
     kindredDistinction,
     vocationDistinction,
-    quirkDistinction
+    quirkDistinction,
+    characterAttributes
   ) => {
     const shallowCharacterCopy = { ...character };
 
     postCharacter(shallowCharacterCopy)
       .then((characterResponse) => {
-        // Update characterId in distinctions
+        // Update characterId in distinctions and attributes
+        const updatedAttributes = characterAttributes.map((attr) => ({
+          characterId: characterResponse.id,
+          attributeId: attr.id,
+          dieSize: attr.dieSize,
+        }));
+        setCharacterAttributes(updatedAttributes);
+
         kindredDistinction.characterId = characterResponse.id;
         vocationDistinction.characterId = characterResponse.id;
         quirkDistinction.characterId = characterResponse.id;
 
-        // Post all distinctions concurrently
+        // Post all distinctions and attributes concurrently
         return Promise.all([
           postKindredDistinction(kindredDistinction),
           postVocationDistinction(vocationDistinction),
           postQuirkDistinction(quirkDistinction),
+          ...updatedAttributes.map((attr) => postCharacterAttribute(attr)),
         ]);
       })
       .then(() => {
-        // Navigate to characters/view after successful submission
         navigate("/characters/view");
       })
       .catch((error) => {
@@ -117,8 +145,14 @@ export const CharacterCreate = ({ currentUser }) => {
             <VocationSelect
               vocationDistinction={vocationDistinction}
               setVocationDistinction={setVocationDistinction}
-              quirkDistinction={quirkDistinction} // Pass quirkDistinction
-              setQuirkDistinction={setQuirkDistinction} // Pass setter
+              quirkDistinction={quirkDistinction}
+              setQuirkDistinction={setQuirkDistinction}
+              setReady={setReady}
+            />
+          ) : step === 5 ? (
+            <AttributeSelect
+              characterAttributes={characterAttributes}
+              setCharacterAttributes={setCharacterAttributes}
               setReady={setReady}
             />
           ) : null}
@@ -138,14 +172,14 @@ export const CharacterCreate = ({ currentUser }) => {
           ) : null}
         </Nav>
         <Nav>
-          {ready === step && step < 4 ? (
+          {ready === step && step < 5 ? (
             <Button
               className="custom-nav-button"
               onClick={() => setStep((prev) => prev + 1)}
             >
               <FontAwesomeIcon icon="fa-solid fa-circle-arrow-right" />
             </Button>
-          ) : ready === step && step === 4 ? (
+          ) : ready === step && step === 5 ? (
             <Button
               className="custom-nav-button"
               onClick={() =>
@@ -153,7 +187,8 @@ export const CharacterCreate = ({ currentUser }) => {
                   character,
                   kindredDistinction,
                   vocationDistinction,
-                  quirkDistinction
+                  quirkDistinction,
+                  characterAttributes
                 )
               }
             >

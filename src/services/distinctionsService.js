@@ -159,3 +159,4 @@ export const getQuirks = () => {
       console.error("Error fetching quirks:", error);
     });
 };
+
