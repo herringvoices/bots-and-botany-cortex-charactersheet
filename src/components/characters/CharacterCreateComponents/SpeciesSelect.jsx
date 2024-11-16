@@ -23,12 +23,19 @@ export const SpeciesSelect = ({
   const [selectedValue, setSelectedValue] = useState([]);
 
   // Fetch species, sfx, speciesSfx, and values once when the component mounts.
-  useEffect(() => {
-    getSpecies().then(setSpecies);
-    getSFX().then(setSfx);
-    getSpeciesSFX().then(setSpeciesSfx);
-    getValues().then(setValues);
-  }, []);
+useEffect(() => {
+  Promise.all([getSpecies(), getSFX(), getSpeciesSFX(), getValues()])
+    .then(([species, sfx, speciesSfx, values]) => {
+      setSpecies(species);
+      setSfx(sfx);
+      setSpeciesSfx(speciesSfx);
+      setValues(values);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}, []);
+
 
   // Set selected species when kindredDistinction.speciesId or species change.
   useEffect(() => {

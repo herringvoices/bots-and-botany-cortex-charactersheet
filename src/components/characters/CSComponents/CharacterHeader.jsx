@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Col, Row, Image, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateCharacter } from "../../services/Service";
+import { updateCharacter } from "../../../services/Service";
 
 export const CharacterHeader = ({ character, setCharacter }) => {
   const [edit, setEdit] = useState(false);
@@ -65,7 +65,7 @@ export const CharacterHeader = ({ character, setCharacter }) => {
           </div>
         )}
       </Col>
-      <Col xs={{ offset: 6, span: 2 }} className="p-2 text-end">
+      <Col xs={{ offset: 10, span: 1 }} className="p-2 text-end">
         {edit ? (
           <Button className="btn-edit" onClick={handleSave}>
             <FontAwesomeIcon icon="fa-solid fa-floppy-disk" />

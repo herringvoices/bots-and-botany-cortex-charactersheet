@@ -22,10 +22,16 @@ export const BackgroundSelect = ({
 
   // Fetch background once when the component mounts.
   useEffect(() => {
-    getBackground().then(setBackground);
-    getSFX().then(setSfx);
-    getBackgroundSFX().then(setBackgroundSfx);
-    getValues().then(setValues);
+    Promise.all([getBackground(), getSFX(), getBackgroundSFX(), getValues()])
+      .then(([background, sfx, backgroundSfx, values]) => {
+        setBackground(background);
+        setSfx(sfx);
+        setBackgroundSfx(backgroundSfx);
+        setValues(values);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
 
   // Fetch background once when the component mounts.
