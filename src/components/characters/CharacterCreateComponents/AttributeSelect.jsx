@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap"; // Bootstrap components
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // FontAwesome for icons
 import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap styles (if not already globally included)
+import { DieSize } from "../DieSize";
 
 export const AttributeSelect = ({
   characterAttributes,
@@ -77,9 +78,7 @@ export const AttributeSelect = ({
                 </Button>
               </Col>
               <Col xs={{ offset: 1, span: 2 }}>
-                <div className="diamond">
-                  <div>{attribute.dieSize}</div>
-                </div>
+                <DieSize dieSize={attribute?.dieSize} />
               </Col>
               <Col xs={{ offset: 1, span: 2 }}>
                 <Button

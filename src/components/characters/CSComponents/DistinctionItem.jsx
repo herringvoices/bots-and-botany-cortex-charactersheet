@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DieSize } from "../DieSize";
 
 export const DistinctionItem = ({
   title, // e.g., "Kindred", "Vocation", or "Quirk"
@@ -110,9 +111,7 @@ export const DistinctionItem = ({
               ) : null}
             </Col>
             <Col xs={{ offset: 1, span: 2 }}>
-              <div className="diamond">
-                <div>{distinction?.dieSize}</div>
-              </div>
+              <DieSize dieSize={distinction?.dieSize} />
             </Col>
             <Col xs={{ offset: 1, span: 2 }}>
               {edit ? (
