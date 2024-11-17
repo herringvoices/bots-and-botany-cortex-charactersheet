@@ -2,9 +2,17 @@
 
 .distinction-item {
   background: var(--primary-gradient) !important;
-  margin: 0.5em !important;
+  margin: 0.5em;
   border-radius: 8px !important;
   padding: 1em 0 !important;
+  box-sizing: border-box !important; /* Ensure padding stays inside the element */
+}
+
+.flex-row {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next row */
+  justify-content: space-around; /* Adds equal space around each item */
+  gap: 1em; /* Adds spacing between rows (optional) */
 }
 
 .diamond {
@@ -23,6 +31,88 @@
   font-size: 1.5rem !important;
   font-weight: bold !important;
   margin: 0 auto !important; /* Centers the diamond in the column */
+}
+
+.triangle {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent; /* Adjust size */
+  border-right: 25px solid transparent;
+  border-bottom: 50px solid var(--dark-color); /* Use your variable here */
+  text-align: center;
+  display: inline-block;
+  margin: 20px; /* Optional spacing */
+  color: var(--primary-color); /* Text color from variable */
+  font-size: 16px; /* Adjust as needed */
+}
+
+.triangle {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent; /* Triangle sides */
+  border-right: 25px solid transparent;
+  border-bottom: 50px solid var(--dark-color); /* Triangle background */
+}
+
+.triangle-content {
+  position: absolute; /* Position text relative to the triangle */
+  top: 65%; /* Adjust for the triangle's shape */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--primary-color); /* Text color */
+  font-size: 16px; /* Adjust as needed */
+  font-weight: bold; /* Make the text stand out */
+  text-align: center;
+}
+
+.square {
+  width: 50px; /* Adjust size */
+  height: 50px;
+  background-color: var(--dark-color);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 auto;
+  text-align: center;
+}
+.hexagon {
+  width: 50px; /* Adjust width */
+  height: 30px; /* Adjust height */
+  background-color: var(--dark-color);
+  position: relative;
+  margin: 0 auto;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.hexagon::before,
+.hexagon::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+}
+
+.hexagon::before {
+  bottom: 100%;
+  border-bottom: 15px solid var(--dark-color);
+}
+
+.hexagon::after {
+  top: 100%;
+  border-top: 15px solid var(--dark-color);
 }
 
 /* Rotate the text back to normal */
@@ -85,12 +175,10 @@
       --secondary-gradient-transparent
     ); // Gradient for items
     border: none;
-    
 
     &.active {
       // Style for active items
       background-color: var(--primary-color);
-      
     }
   }
 
@@ -154,5 +242,4 @@
   color: var(--dark-color) !important; // Text color for active state
   border: none !important;
   box-shadow: none !important;
-
 }

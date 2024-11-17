@@ -4,37 +4,36 @@ import {
   getSFX,
   getBackground,
   getBackgroundSFX,
-  getValues,
 } from "../../../services/Service";
 
 export const BackgroundSelect = ({
   kindredDistinction,
   setKindredDistinction,
   setReady,
+  values, // Use values from the parent
+  setModifiedValues, // Update modifiedValues in the parent
 }) => {
   const [background, setBackground] = useState([]);
   const [selectedBackground, setSelectedBackground] = useState(null);
   const [sfx, setSfx] = useState([]);
   const [backgroundSfx, setBackgroundSfx] = useState([]);
   const [selectedBackgroundSfx, setSelectedBackgroundSfx] = useState([]);
-  const [values, setValues] = useState([]);
-  const [selectedValue, setSelectedValue] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(null);
 
-  // Fetch background once when the component mounts.
+  // Fetch background, sfx, and backgroundSfx once when the component mounts.
   useEffect(() => {
-    Promise.all([getBackground(), getSFX(), getBackgroundSFX(), getValues()])
-      .then(([background, sfx, backgroundSfx, values]) => {
+    Promise.all([getBackground(), getSFX(), getBackgroundSFX()])
+      .then(([background, sfx, backgroundSfx]) => {
         setBackground(background);
         setSfx(sfx);
         setBackgroundSfx(backgroundSfx);
-        setValues(values);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, []);
 
-  // Fetch background once when the component mounts.
+  // Set selected background when kindredDistinction.backgroundId changes.
   useEffect(() => {
     setSelectedBackground(
       background.find(
@@ -43,31 +42,35 @@ export const BackgroundSelect = ({
     );
   }, [kindredDistinction, background]);
 
+  // Update selectedValue and modifiedValues when selectedBackground changes.
   useEffect(() => {
-    if (backgroundSfx) {
+    if (selectedBackground) {
+      const foundValue = values.find(
+        (item) => item.id === selectedBackground.valueId
+      );
+      setSelectedValue(foundValue);
+
+      // Update the modifiedValues array in the parent.
+      setModifiedValues((prev) =>
+        prev.map((val) =>
+          val.id === 2 ? { ...val, valueId: foundValue?.id || 0 } : val
+        )
+      );
+
+      // Update selectedBackgroundSfx based on the selected background.
       const selectedSSFX = backgroundSfx.filter(
         (item) => item?.backgroundId === selectedBackground?.id
       );
       const sfxOptions = sfx.filter((item) =>
         selectedSSFX.some((selected) => selected.sfxId === item.id)
       );
-
       setSelectedBackgroundSfx(sfxOptions);
     }
-    if (values) {
-      const foundValue = values.find(
-        (item) => item.id === selectedBackground?.valueId
-      );
-      setSelectedValue(foundValue);
-    }
-  }, [background, selectedBackground, sfx, backgroundSfx]);
+  }, [selectedBackground, values, backgroundSfx, sfx, setModifiedValues]);
 
+  // Update readiness based on whether a background is selected.
   useEffect(() => {
-    if (kindredDistinction.backgroundId) {
-      setReady(3);
-    } else {
-      setReady(2);
-    }
+    setReady(kindredDistinction.backgroundId ? 3 : 2);
   }, [kindredDistinction]);
 
   return (
@@ -89,9 +92,9 @@ export const BackgroundSelect = ({
                 <option value="" disabled>
                   Select a background
                 </option>
-                {background.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
+                {background.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
                   </option>
                 ))}
               </Form.Select>

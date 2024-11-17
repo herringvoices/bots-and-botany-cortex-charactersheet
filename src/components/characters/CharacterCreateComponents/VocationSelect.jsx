@@ -3,7 +3,6 @@ import { Row } from "react-bootstrap";
 import {
   getSFX,
   getAdjectiveSFX,
-  getValues,
   getJobs,
   getJobSFX,
   getAdjectives,
@@ -17,59 +16,34 @@ export const VocationSelect = ({
   quirkDistinction,
   setQuirkDistinction,
   setReady,
+  values, // Shared values from parent
+  setModifiedValues, // Function to update modifiedValues in parent
 }) => {
   const [adjectives, setAdjectives] = useState([]);
   const [selectedAdjective, setSelectedAdjective] = useState(null);
-  const [adjectiveSfx, setAdjectiveSfx] = useState([]);
-  const [selectedAdjectiveSfx, setSelectedAdjectiveSfx] = useState([]);
 
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [jobSfx, setJobSfx] = useState([]);
-  const [selectedJobSfx, setSelectedJobSfx] = useState([]);
 
-  const [quirks, setQuirks] = useState([]); // Add quirks
-  const [selectedQuirk, setSelectedQuirk] = useState(null); // Add selected quirk
-  const [quirkSfx, setQuirkSfx] = useState([]); // Add quirk SFX
-  const [selectedQuirkSfx, setSelectedQuirkSfx] = useState([]); // Add selected quirk SFX
-  const [selectedQuirkValue, setSelectedQuirkValue] = useState([]); // Add quirk value
+  const [quirks, setQuirks] = useState([]);
+  const [selectedQuirk, setSelectedQuirk] = useState(null);
 
-  const [values, setValues] = useState([]);
-  const [selectedAdjectiveValue, setSelectedAdjectiveValue] = useState([]);
-  const [selectedJobValue, setSelectedJobValue] = useState([]);
-  const [sfx, setSfx] = useState([]);
-
-  // Fetch data for jobs, adjectives, quirks, SFX, and values
+  // Fetch data for adjectives, jobs, and quirks from the server
   useEffect(() => {
     Promise.all([
       getJobs(),
-      getSFX(),
-      getJobSFX(),
+      getSFX(), // Fetch job-related special effects
+      getJobSFX(), // Fetch job-to-SFX mapping
       getAdjectives(),
-      getAdjectiveSFX(),
-      getQuirks(), // Fetch quirks
-      getQuirkSFX(), // Fetch quirk SFX
-      getValues(),
+      getAdjectiveSFX(), // Fetch adjective-to-SFX mapping
+      getQuirks(),
+      getQuirkSFX(), // Fetch quirk-to-SFX mapping
     ])
       .then(
-        ([
-          jobs,
-          sfx,
-          jobSfx,
-          adjectives,
-          adjectiveSfx,
-          quirks,
-          quirkSfx,
-          values,
-        ]) => {
+        ([jobs, sfx, jobSfx, adjectives, adjectiveSfx, quirks, quirkSfx]) => {
           setJobs(jobs);
-          setSfx(sfx);
-          setJobSfx(jobSfx);
           setAdjectives(adjectives);
-          setAdjectiveSfx(adjectiveSfx);
-          setQuirks(quirks); // Set quirks
-          setQuirkSfx(quirkSfx); // Set quirk SFX
-          setValues(values);
+          setQuirks(quirks);
         }
       )
       .catch((error) => {
@@ -77,25 +51,21 @@ export const VocationSelect = ({
       });
   }, []);
 
-  // Update selected adjective SFX and value when the selected adjective changes
+  // Update modifiedValues when the selected adjective changes
   useEffect(() => {
-    if (adjectiveSfx) {
-      const selectedASFX = adjectiveSfx.filter(
-        (item) => item?.adjectiveId === selectedAdjective?.id
-      );
-      const sfxOptions = sfx.filter((item) =>
-        selectedASFX.some((selected) => selected.sfxId === item.id)
-      );
-      setSelectedAdjectiveSfx(sfxOptions);
-    }
-    if (values) {
+    if (selectedAdjective) {
       const foundValue = values.find(
-        (item) => item.id === selectedAdjective?.valueId
+        (item) => item.id === selectedAdjective.valueId
       );
-      setSelectedAdjectiveValue(foundValue);
+      setModifiedValues((prev) =>
+        prev.map((val) =>
+          val.id === 3 ? { ...val, valueId: foundValue?.id || 0 } : val
+        )
+      );
     }
-  }, [adjectives, selectedAdjective, sfx, adjectiveSfx]);
+  }, [selectedAdjective, values, setModifiedValues]);
 
+  // Set the selected adjective when the adjective ID changes
   useEffect(() => {
     setSelectedAdjective(
       adjectives.find(
@@ -104,110 +74,111 @@ export const VocationSelect = ({
     );
   }, [adjectives, vocationDistinction.adjectiveId]);
 
-  // Update selected job SFX and value when the selected job changes
+  // Update modifiedValues when the selected job changes
   useEffect(() => {
-    if (jobSfx) {
-      const selectedJSFX = jobSfx.filter(
-        (item) => item?.jobId === selectedJob?.id
+    if (selectedJob) {
+      const foundValue = values.find((item) => item.id === selectedJob.valueId);
+      setModifiedValues((prev) =>
+        prev.map((val) =>
+          val.id === 4 ? { ...val, valueId: foundValue?.id || 0 } : val
+        )
       );
-      const sfxOptions = sfx.filter((item) =>
-        selectedJSFX.some((selected) => selected.sfxId === item.id)
-      );
-      setSelectedJobSfx(sfxOptions);
     }
-    if (values) {
-      const foundValue = values.find(
-        (item) => item.id === selectedJob?.valueId
-      );
-      setSelectedJobValue(foundValue);
-    }
-  }, [jobs, selectedJob, sfx, jobSfx]);
+  }, [selectedJob, values, setModifiedValues]);
 
+  // Set the selected job when the job ID changes
   useEffect(() => {
     setSelectedJob(
       jobs.find((item) => item.id === parseInt(vocationDistinction.jobId))
     );
   }, [jobs, vocationDistinction.jobId]);
 
-  // Update selected quirk SFX and value when the selected quirk changes
+  // Update modifiedValues when the selected quirk changes
   useEffect(() => {
-    if (quirkSfx) {
-      const selectedQSFX = quirkSfx.filter(
-        (item) => item?.quirkId === selectedQuirk?.id
-      );
-      const sfxOptions = sfx.filter((item) =>
-        selectedQSFX.some((selected) => selected.sfxId === item.id)
-      );
-      setSelectedQuirkSfx(sfxOptions);
-    }
-    if (values) {
+    if (selectedQuirk) {
       const foundValue = values.find(
-        (item) => item.id === selectedQuirk?.valueId
+        (item) => item.id === selectedQuirk.valueId
       );
-      setSelectedQuirkValue(foundValue);
+      setModifiedValues((prev) =>
+        prev.map((val) =>
+          val.id === 5 ? { ...val, valueId: foundValue?.id || 0 } : val
+        )
+      );
     }
-  }, [quirks, selectedQuirk, sfx, quirkSfx]);
+  }, [selectedQuirk, values, setModifiedValues]);
 
+  // Set the selected quirk when the quirk ID changes
   useEffect(() => {
     setSelectedQuirk(
       quirks.find((item) => item.id === parseInt(quirkDistinction.quirkId))
     );
   }, [quirks, quirkDistinction.quirkId]);
 
-  // Update the `ready` state based on whether adjective, job, and quirk are selected
+  // Update readiness state based on whether all required selections are made
   useEffect(() => {
     if (
       vocationDistinction.adjectiveId &&
       vocationDistinction.jobId &&
       quirkDistinction.quirkId
     ) {
-      setReady(4); // All selected, ready to proceed
+      setReady(4);
     } else {
-      setReady(3); // Partial selection
+      setReady(3);
     }
   }, [vocationDistinction, quirkDistinction]);
 
   return (
     <>
       <Row>
+        {/* Dropdown for Adjectives */}
         <VocationItem
           item={"Adjectives"}
-          sfx={selectedAdjectiveSfx}
-          array={adjectives}
+          sfx={[]} // Placeholder for special effects
+          array={adjectives} // Options for the dropdown
           setter={(value) =>
             setVocationDistinction({
               ...vocationDistinction,
               adjectiveId: value,
             })
           }
-          value={vocationDistinction.adjectiveId}
-          selectedValue={selectedAdjectiveValue}
+          value={vocationDistinction.adjectiveId} // Currently selected value
+          selectedValue={values.find(
+            (item) => item.id === selectedAdjective?.valueId
+          )}
         />
+
+        {/* Dropdown for Jobs */}
         <VocationItem
           item={"Jobs"}
-          sfx={selectedJobSfx}
-          array={jobs}
+          sfx={[]} // Placeholder for special effects
+          array={jobs} // Options for the dropdown
           setter={(value) =>
             setVocationDistinction({
               ...vocationDistinction,
               jobId: value,
             })
           }
-          value={vocationDistinction.jobId}
-          selectedValue={selectedJobValue}
+          value={vocationDistinction.jobId} // Currently selected value
+          selectedValue={values.find(
+            (item) => item.id === selectedJob?.valueId
+          )}
         />
+
+        {/* Dropdown for Quirks */}
         <VocationItem
           item={"Quirks"}
-          sfx={selectedQuirkSfx}
-          array={quirks}
+          sfx={[]} // Placeholder for special effects
+          array={quirks} // Options for the dropdown
           setter={(value) =>
             setQuirkDistinction({
               ...quirkDistinction,
               quirkId: value,
             })
           }
-          value={quirkDistinction.quirkId}
-          selectedValue={selectedQuirkValue}
+          value={quirkDistinction.quirkId} // Currently selected value
+          selectedValue={values.find(
+            (item) => item.id === selectedQuirk?.valueId
+          )}
         />
       </Row>
     </>

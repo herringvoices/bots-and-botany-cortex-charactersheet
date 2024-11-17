@@ -13,29 +13,28 @@ export const SpeciesSelect = ({
   setReady,
   setCharacter,
   character,
+  values, // Receive values from parent
+  setModifiedValues, // Receive setModifiedValues from parent
 }) => {
   const [species, setSpecies] = useState([]);
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [sfx, setSfx] = useState([]);
   const [speciesSfx, setSpeciesSfx] = useState([]);
   const [selectedSpeciesSfx, setSelectedSpeciesSfx] = useState([]);
-  const [values, setValues] = useState([]);
-  const [selectedValue, setSelectedValue] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(null);
 
-  // Fetch species, sfx, speciesSfx, and values once when the component mounts.
-useEffect(() => {
-  Promise.all([getSpecies(), getSFX(), getSpeciesSFX(), getValues()])
-    .then(([species, sfx, speciesSfx, values]) => {
-      setSpecies(species);
-      setSfx(sfx);
-      setSpeciesSfx(speciesSfx);
-      setValues(values);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-}, []);
-
+  // Fetch species, sfx, and speciesSfx once when the component mounts.
+  useEffect(() => {
+    Promise.all([getSpecies(), getSFX(), getSpeciesSFX()])
+      .then(([species, sfx, speciesSfx]) => {
+        setSpecies(species);
+        setSfx(sfx);
+        setSpeciesSfx(speciesSfx);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   // Set selected species when kindredDistinction.speciesId or species change.
   useEffect(() => {
@@ -44,15 +43,29 @@ useEffect(() => {
     );
   }, [kindredDistinction, species]);
 
-  // Update character image when selectedSpecies changes and is defined.
+  // Update character image and selectedValue when selectedSpecies changes.
   useEffect(() => {
     if (selectedSpecies) {
       setCharacter({ ...character, image: selectedSpecies.image });
-    }
-  }, [selectedSpecies]);
 
+      // Find and set the value associated with the selected species.
+      const foundValue = values.find(
+        (item) => item.id === selectedSpecies.valueId
+      );
+      setSelectedValue(foundValue);
+
+      // Update modifiedValues in the parent to match the selectedValue.
+      setModifiedValues((prev) =>
+        prev.map((val) =>
+          val.id === 1 ? { ...val, valueId: foundValue?.id || 0 } : val
+        )
+      );
+    }
+  }, [selectedSpecies, values, setCharacter, setModifiedValues]);
+
+  // Update selectedSpeciesSfx when speciesSfx or selectedSpecies changes.
   useEffect(() => {
-    if (speciesSfx) {
+    if (speciesSfx && selectedSpecies) {
       const selectedSSFX = speciesSfx.filter(
         (item) => item?.speciesId === selectedSpecies?.id
       );
@@ -61,14 +74,9 @@ useEffect(() => {
       );
       setSelectedSpeciesSfx(sfxOptions);
     }
-    if (values) {
-      const foundValue = values.find(
-        (item) => item.id === selectedSpecies?.valueId
-      );
-      setSelectedValue(foundValue);
-    }
-  }, [species, selectedSpecies, sfx, speciesSfx]);
+  }, [speciesSfx, selectedSpecies, sfx]);
 
+  // Update readiness based on whether a species is selected.
   useEffect(() => {
     setReady(kindredDistinction.speciesId ? 2 : 1);
   }, [kindredDistinction]);
