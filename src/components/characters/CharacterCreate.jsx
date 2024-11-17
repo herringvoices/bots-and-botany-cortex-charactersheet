@@ -5,10 +5,15 @@ import { SpeciesSelect } from "./CharacterCreateComponents/SpeciesSelect";
 import { BackgroundSelect } from "./CharacterCreateComponents/BackgroundSelect";
 import { VocationSelect } from "./CharacterCreateComponents/VocationSelect";
 import { AttributeSelect } from "./CharacterCreateComponents/AttributeSelect";
+import { ValueSelect } from "./CharacterCreateComponents/ValueSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CharacterCreate.scss";
 import "animate.css";
-import { postCharacter, postKindredDistinction } from "../../services/Service";
+import {
+  getValues,
+  postCharacter,
+  postKindredDistinction,
+} from "../../services/Service";
 
 import {
   postVocationDistinction,
@@ -27,9 +32,11 @@ export const CharacterCreate = ({ currentUser }) => {
   const [vocationDistinction, setVocationDistinction] = useState({});
   const [quirkDistinction, setQuirkDistinction] = useState({});
   const [characterAttributes, setCharacterAttributes] = useState([]);
-  const [pointsAvailable, setPointsAvailable] = useState(11); // Initialize points available
+  const [characterValues, setCharacterValues] = useState([]); // State for values
   const [ready, setReady] = useState(0);
   const navigate = useNavigate();
+  const [values, setValues] = useState([]);
+  const [modifiedValues, setModifiedValues] = useState([]);
 
   // Initialize state on first render
   useEffect(() => {
@@ -61,6 +68,24 @@ export const CharacterCreate = ({ currentUser }) => {
       quirkId: 0,
       dieSize: 8,
     });
+
+    getValues().then((values) => {
+      setValues(values);
+
+      // Initialize characterValues with valueId, characterId, and dieSize
+      const initializedValues = values.map((value) => ({
+        valueId: value.id, // Set valueId equal to value.id
+        characterId: currentUser.id, // Set characterId equal to currentUser.id
+        dieSize: 4, // Initialize dieSize at 4
+      }));
+      setCharacterValues(initializedValues);
+    });
+
+    const newValues = [];
+    for (let i = 1; i < 5; i++) {
+      newValues.push({ id: i, characterId: currentUser.id, valueId: 0 });
+    }
+    setModifiedValues(newValues);
 
     // Fetch attributes and initialize characterAttributes
     getAttributes()
@@ -125,21 +150,22 @@ export const CharacterCreate = ({ currentUser }) => {
               setReady={setReady}
             />
           ) : step === 2 ? (
-            <>
-              <h1>Species Selection</h1>
-              <SpeciesSelect
-                setCharacter={setCharacter}
-                kindredDistinction={kindredDistinction}
-                setKindredDistinction={setKindredDistinction}
-                setReady={setReady}
-                character={character}
-              />
-            </>
+            <SpeciesSelect
+              setCharacter={setCharacter}
+              kindredDistinction={kindredDistinction}
+              setKindredDistinction={setKindredDistinction}
+              setReady={setReady}
+              character={character}
+              values={values}
+              setModifiedValues={setModifiedValues}
+            />
           ) : step === 3 ? (
             <BackgroundSelect
               kindredDistinction={kindredDistinction}
               setKindredDistinction={setKindredDistinction}
               setReady={setReady}
+              values={values}
+              setModifiedValues={setModifiedValues}
             />
           ) : step === 4 ? (
             <VocationSelect
@@ -148,11 +174,21 @@ export const CharacterCreate = ({ currentUser }) => {
               quirkDistinction={quirkDistinction}
               setQuirkDistinction={setQuirkDistinction}
               setReady={setReady}
+              values={values}
+              setModifiedValues={setModifiedValues}
             />
           ) : step === 5 ? (
             <AttributeSelect
               characterAttributes={characterAttributes}
               setCharacterAttributes={setCharacterAttributes}
+              setReady={setReady}
+            />
+          ) : step === 6 ? (
+            <ValueSelect
+              values={values}
+              modifiedValues={modifiedValues}
+              characterValues={characterValues}
+              setCharacterValues={setCharacterValues}
               setReady={setReady}
             />
           ) : null}
@@ -172,14 +208,14 @@ export const CharacterCreate = ({ currentUser }) => {
           ) : null}
         </Nav>
         <Nav>
-          {ready === step && step < 5 ? (
+          {ready === step && step < 6 ? (
             <Button
               className="custom-nav-button"
               onClick={() => setStep((prev) => prev + 1)}
             >
               <FontAwesomeIcon icon="fa-solid fa-circle-arrow-right" />
             </Button>
-          ) : ready === step && step === 5 ? (
+          ) : ready === step && step === 6 ? (
             <Button
               className="custom-nav-button"
               onClick={() =>
