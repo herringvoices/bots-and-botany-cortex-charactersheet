@@ -24,6 +24,7 @@ import {
   getAttributes,
   postCharacterAttribute,
 } from "../../services/attributeService";
+import { postCharacterValue } from "../../services/valueService";
 
 export const CharacterCreate = ({ currentUser }) => {
   const [step, setStep] = useState(1);
@@ -37,6 +38,9 @@ export const CharacterCreate = ({ currentUser }) => {
   const navigate = useNavigate();
   const [values, setValues] = useState([]);
   const [modifiedValues, setModifiedValues] = useState([]);
+  const [attributePoints, setAttributePoints] = useState(11);
+  const [valuePointsAvailable, setValuePointsAvailable] = useState(4);
+  const [valuePointsSpent, setValuePointsSpent] = useState([]);
 
   // Initialize state on first render
   useEffect(() => {
@@ -72,6 +76,12 @@ export const CharacterCreate = ({ currentUser }) => {
     getValues().then((values) => {
       setValues(values);
 
+      const initialPointsSpent = values.map((value) => ({
+        valueId: value.id,
+        pointsSpent: 0,
+      }));
+      setValuePointsSpent(initialPointsSpent);
+
       // Initialize characterValues with valueId, characterId, and dieSize
       const initializedValues = values.map((value) => ({
         valueId: value.id, // Set valueId equal to value.id
@@ -82,7 +92,7 @@ export const CharacterCreate = ({ currentUser }) => {
     });
 
     const newValues = [];
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i < 6; i++) {
       newValues.push({ id: i, characterId: currentUser.id, valueId: 0 });
     }
     setModifiedValues(newValues);
@@ -105,7 +115,8 @@ export const CharacterCreate = ({ currentUser }) => {
     kindredDistinction,
     vocationDistinction,
     quirkDistinction,
-    characterAttributes
+    characterAttributes,
+    characterValues
   ) => {
     const shallowCharacterCopy = { ...character };
 
@@ -113,7 +124,7 @@ export const CharacterCreate = ({ currentUser }) => {
       .then((characterResponse) => {
         // Update characterId in distinctions and attributes
         const updatedAttributes = characterAttributes.map((attr) => ({
-          characterId: characterResponse.id,
+          characterId: characterResponse.id, // Use characterResponse.id
           attributeId: attr.id,
           dieSize: attr.dieSize,
         }));
@@ -123,12 +134,22 @@ export const CharacterCreate = ({ currentUser }) => {
         vocationDistinction.characterId = characterResponse.id;
         quirkDistinction.characterId = characterResponse.id;
 
-        // Post all distinctions and attributes concurrently
+        // Update characterId in characterValues
+        console.log(characterValues);
+        const updatedCharacterValues = characterValues.map((value) => ({
+          characterId: characterResponse.id, // Use characterResponse.id
+          dieSize: value.dieSize,
+          valueId: value.valueId,
+          description: "", // Default to an empty string
+        }));
+
+        // Post all distinctions, attributes, and characterValues concurrently
         return Promise.all([
           postKindredDistinction(kindredDistinction),
           postVocationDistinction(vocationDistinction),
           postQuirkDistinction(quirkDistinction),
           ...updatedAttributes.map((attr) => postCharacterAttribute(attr)),
+          ...updatedCharacterValues.map((value) => postCharacterValue(value)),
         ]);
       })
       .then(() => {
@@ -182,6 +203,8 @@ export const CharacterCreate = ({ currentUser }) => {
               characterAttributes={characterAttributes}
               setCharacterAttributes={setCharacterAttributes}
               setReady={setReady}
+              pointsAvailable={attributePoints}
+              setPointsAvailable={setAttributePoints}
             />
           ) : step === 6 ? (
             <ValueSelect
@@ -190,6 +213,10 @@ export const CharacterCreate = ({ currentUser }) => {
               characterValues={characterValues}
               setCharacterValues={setCharacterValues}
               setReady={setReady}
+              pointsAvailable={valuePointsAvailable}
+              setPointsAvailable={setValuePointsAvailable}
+              pointsSpent={valuePointsSpent}
+              setPointsSpent={setValuePointsSpent}
             />
           ) : null}
         </Row>
@@ -224,7 +251,8 @@ export const CharacterCreate = ({ currentUser }) => {
                   kindredDistinction,
                   vocationDistinction,
                   quirkDistinction,
-                  characterAttributes
+                  characterAttributes,
+                  characterValues
                 )
               }
             >

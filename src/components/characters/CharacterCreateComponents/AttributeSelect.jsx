@@ -8,9 +8,9 @@ export const AttributeSelect = ({
   characterAttributes,
   setCharacterAttributes,
   setReady,
+  pointsAvailable,
+  setPointsAvailable,
 }) => {
-  const [pointsAvailable, setPointsAvailable] = useState(11); // Local state for points
-
   // Set readiness state based on pointsAvailable and attribute validation
   useEffect(() => {
     if (
