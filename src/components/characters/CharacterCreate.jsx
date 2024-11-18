@@ -139,7 +139,7 @@ export const CharacterCreate = ({ currentUser }) => {
         const updatedCharacterValues = characterValues.map((value) => ({
           characterId: characterResponse.id, // Use characterResponse.id
           dieSize: value.dieSize,
-          valueId: value.valueId,
+          valueId: value.id,
           description: "", // Default to an empty string
         }));
 
