@@ -28,53 +28,57 @@ export const CharacterHeader = ({ character, setCharacter }) => {
   };
 
   return (
-    <Row className="dark-container text-center mt-5 align-items-start">
-      <Col md={{ span: 2 }} className="image-column">
-        <Image
-          roundedCircle
-          className="character-image"
-          src={character?.image}
-        />
-      </Col>
-      <Col md={{ span: 2 }} className="my-auto text-start">
-        {edit ? (
-          <Form>
-            <Form.Group controlId="characterName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={character?.name}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="characterPronouns" className="mt-2">
-              <Form.Label>Pronouns</Form.Label>
-              <Form.Control
-                type="text"
-                name="pronouns"
-                value={character?.pronouns}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </Form>
-        ) : (
-          <div>
-            <h1>{character?.name}</h1>
-            {character?.pronouns}
-          </div>
-        )}
-      </Col>
-      <Col xs={{ offset: 10, span: 1 }} className="p-2 text-end">
-        {edit ? (
-          <Button className="btn-edit" onClick={handleSave}>
-            <FontAwesomeIcon icon="fa-solid fa-floppy-disk" />
-          </Button>
-        ) : (
-          <Button className="btn-edit" onClick={() => setEdit(true)}>
-            <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
-          </Button>
-        )}
+    <Row>
+      <Col md={{ offset: 2, span: 8 }}>
+        <Row className="dark-container text-center mt-5 align-items-start">
+          <Col md={{ span: 2 }} className="image-column">
+            <Image
+              roundedCircle
+              className="character-image"
+              src={character?.image}
+            />
+          </Col>
+          <Col md={{ span: 2 }} className="my-auto text-start">
+            {edit ? (
+              <Form>
+                <Form.Group controlId="characterName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={character?.name}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Form.Group controlId="characterPronouns" className="mt-2 mb-2">
+                  <Form.Label>Pronouns</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="pronouns"
+                    value={character?.pronouns}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Form>
+            ) : (
+              <div>
+                <h1>{character?.name}</h1>
+                {character?.pronouns}
+              </div>
+            )}
+          </Col>
+          <Col className=" text-end p-2">
+            {edit ? (
+              <Button className="btn-edit" onClick={handleSave}>
+                <FontAwesomeIcon icon="fa-solid fa-floppy-disk" />
+              </Button>
+            ) : (
+              <Button className="btn-edit" onClick={() => setEdit(true)}>
+                <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
+              </Button>
+            )}
+          </Col>
+        </Row>{" "}
       </Col>
     </Row>
   );
