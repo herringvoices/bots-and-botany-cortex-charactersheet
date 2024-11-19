@@ -85,7 +85,7 @@ export const BackgroundSelect = ({
                 onChange={(evt) =>
                   setKindredDistinction({
                     ...kindredDistinction,
-                    backgroundId: evt.target.value,
+                    backgroundId: parseInt(evt.target.value, 10),
                   })
                 }
               >

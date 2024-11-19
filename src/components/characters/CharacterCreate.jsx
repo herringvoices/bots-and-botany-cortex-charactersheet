@@ -6,6 +6,7 @@ import { BackgroundSelect } from "./CharacterCreateComponents/BackgroundSelect";
 import { VocationSelect } from "./CharacterCreateComponents/VocationSelect";
 import { AttributeSelect } from "./CharacterCreateComponents/AttributeSelect";
 import { ValueSelect } from "./CharacterCreateComponents/ValueSelect";
+import { SFXSelect } from "./CharacterCreateComponents/SFXSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CharacterCreate.scss";
 import "animate.css";
@@ -25,6 +26,7 @@ import {
   postCharacterAttribute,
 } from "../../services/attributeService";
 import { postCharacterValue } from "../../services/valueService";
+import { getExpandedSFX, postCharacterSFX } from "../../services/sfxService";
 
 export const CharacterCreate = ({ currentUser }) => {
   const [step, setStep] = useState(1);
@@ -34,6 +36,8 @@ export const CharacterCreate = ({ currentUser }) => {
   const [quirkDistinction, setQuirkDistinction] = useState({});
   const [characterAttributes, setCharacterAttributes] = useState([]);
   const [characterValues, setCharacterValues] = useState([]); // State for values
+  const [characterSFX, setCharacterSFX] = useState([]);
+  const [expandedSFX, setExpandedSFX] = useState([]); // New state for expanded SFX
   const [ready, setReady] = useState(0);
   const navigate = useNavigate();
   const [values, setValues] = useState([]);
@@ -44,34 +48,42 @@ export const CharacterCreate = ({ currentUser }) => {
 
   // Initialize state on first render
   useEffect(() => {
-    setCharacter({
-      userId: currentUser.id,
-      name: "",
-      pronouns: "",
-      plotPoints: 0,
-      description: "",
-      image: "",
-    });
+    if (Object.keys(character).length === 0) {
+      setCharacter({
+        userId: currentUser.id,
+        name: "",
+        pronouns: "",
+        plotPoints: 0,
+        description: "",
+        image: "",
+      });
+    }
 
-    setKindredDistinction({
-      characterId: 0,
-      speciesId: 0,
-      backgroundId: 0,
-      dieSize: 8,
-    });
+    if (Object.keys(kindredDistinction).length === 0) {
+      setKindredDistinction({
+        characterId: 0,
+        speciesId: 0,
+        backgroundId: 0,
+        dieSize: 8,
+      });
+    }
 
-    setVocationDistinction({
-      characterId: 0,
-      adjectiveId: 0,
-      jobId: 0,
-      dieSize: 8,
-    });
+    if (Object.keys(vocationDistinction).length === 0) {
+      setVocationDistinction({
+        characterId: 0,
+        adjectiveId: 0,
+        jobId: 0,
+        dieSize: 8,
+      });
+    }
 
-    setQuirkDistinction({
-      characterId: 0,
-      quirkId: 0,
-      dieSize: 8,
-    });
+    if (Object.keys(quirkDistinction).length === 0) {
+      setQuirkDistinction({
+        characterId: 0,
+        quirkId: 0,
+        dieSize: 8,
+      });
+    }
 
     getValues().then((values) => {
       setValues(values);
@@ -108,7 +120,102 @@ export const CharacterCreate = ({ currentUser }) => {
         setCharacterAttributes(initializedAttributes);
       })
       .catch((error) => console.error("Error fetching attributes:", error));
+
+    // Fetch expanded SFX and set state
+    getExpandedSFX()
+      .then((sfxData) => {
+        setExpandedSFX(sfxData);
+      })
+      .catch((error) => console.error("Error fetching expanded SFX:", error));
   }, [currentUser]);
+
+  const populateCharacterSFX = (kindred, vocation, quirk) => {
+    let updatedCharacterSFX = [];
+
+    expandedSFX.forEach((sfx) => {
+      // Use .some() to check for a matching speciesId
+      if (
+        sfx.speciesSfx?.some(
+          (speciesSfx) => speciesSfx.speciesId === kindred?.speciesId
+        )
+      ) {
+        updatedCharacterSFX.push({
+          characterId: 0, // Update accordingly if needed
+          sfxId: sfx.id,
+          name: sfx.name,
+          description: sfx.description,
+          locked: true,
+        });
+      }
+
+      // Use .some() to check for a matching backgroundId
+      if (
+        sfx.backgroundSfx?.some(
+          (backgroundSfx) =>
+            backgroundSfx.backgroundId === kindred?.backgroundId
+        )
+      ) {
+        updatedCharacterSFX.push({
+          characterId: 0,
+          sfxId: sfx.id,
+          name: sfx.name,
+          description: sfx.description,
+          locked: true,
+        });
+      }
+
+      // Use .some() to check for a matching jobId
+      if (sfx.jobSfx?.some((jobSfx) => jobSfx.jobId === vocation?.jobId)) {
+        updatedCharacterSFX.push({
+          characterId: 0,
+          sfxId: sfx.id,
+          name: sfx.name,
+          description: sfx.description,
+          locked: true,
+        });
+      }
+
+      // Use .some() to check for a matching adjectiveId
+      if (
+        sfx.adjectiveSfx?.some(
+          (adjectiveSfx) => adjectiveSfx.adjectiveId === vocation?.adjectiveId
+        )
+      ) {
+        updatedCharacterSFX.push({
+          characterId: 0,
+          sfxId: sfx.id,
+          name: sfx.name,
+          description: sfx.description,
+          locked: true,
+        });
+      }
+
+      // Use .some() to check for a matching quirkId
+      if (
+        sfx.quirkSfx?.some((quirkSfx) => quirkSfx.quirkId === quirk?.quirkId)
+      ) {
+        updatedCharacterSFX.push({
+          characterId: 0,
+          sfxId: sfx.id,
+          name: sfx.name,
+          description: sfx.description,
+          locked: true,
+        });
+      }
+    });
+
+    setCharacterSFX(updatedCharacterSFX);
+  };
+
+  useEffect(() => {
+    if (expandedSFX.length > 0) {
+      populateCharacterSFX(
+        kindredDistinction,
+        vocationDistinction,
+        quirkDistinction
+      );
+    }
+  }, [expandedSFX]);
 
   const handleSubmit = (
     character,
@@ -116,7 +223,8 @@ export const CharacterCreate = ({ currentUser }) => {
     vocationDistinction,
     quirkDistinction,
     characterAttributes,
-    characterValues
+    characterValues,
+    characterSFX
   ) => {
     const shallowCharacterCopy = { ...character };
 
@@ -135,7 +243,6 @@ export const CharacterCreate = ({ currentUser }) => {
         quirkDistinction.characterId = characterResponse.id;
 
         // Update characterId in characterValues
-        console.log(characterValues);
         const updatedCharacterValues = characterValues.map((value) => ({
           characterId: characterResponse.id, // Use characterResponse.id
           dieSize: value.dieSize,
@@ -143,13 +250,31 @@ export const CharacterCreate = ({ currentUser }) => {
           description: "", // Default to an empty string
         }));
 
-        // Post all distinctions, attributes, and characterValues concurrently
+        // Update characterId in characterSFX
+        const updatedCharacterSFX = characterSFX.map((sfx) => ({
+          ...sfx,
+          characterId: characterResponse.id, // Use characterResponse.id
+        }));
+
+        // Add the Hinder SFX to characterSFX
+        const hinderSFX = {
+          characterId: characterResponse.id,
+          sfxId: 101,
+          name: "Hinder",
+          description:
+            "Gain a PP when you step a distinction down to a d4 for an action.",
+          locked: false,
+        };
+
+        // Post all distinctions, attributes, characterValues, and characterSFX concurrently
         return Promise.all([
           postKindredDistinction(kindredDistinction),
           postVocationDistinction(vocationDistinction),
           postQuirkDistinction(quirkDistinction),
           ...updatedAttributes.map((attr) => postCharacterAttribute(attr)),
           ...updatedCharacterValues.map((value) => postCharacterValue(value)),
+          ...updatedCharacterSFX.map((sfx) => postCharacterSFX(sfx)),
+          postCharacterSFX(hinderSFX),
         ]);
       })
       .then(() => {
@@ -174,7 +299,14 @@ export const CharacterCreate = ({ currentUser }) => {
             <SpeciesSelect
               setCharacter={setCharacter}
               kindredDistinction={kindredDistinction}
-              setKindredDistinction={setKindredDistinction}
+              setKindredDistinction={(updatedDistinction) => {
+                setKindredDistinction(updatedDistinction);
+                populateCharacterSFX(
+                  updatedDistinction,
+                  vocationDistinction,
+                  quirkDistinction
+                );
+              }}
               setReady={setReady}
               character={character}
               values={values}
@@ -183,7 +315,14 @@ export const CharacterCreate = ({ currentUser }) => {
           ) : step === 3 ? (
             <BackgroundSelect
               kindredDistinction={kindredDistinction}
-              setKindredDistinction={setKindredDistinction}
+              setKindredDistinction={(updatedDistinction) => {
+                setKindredDistinction(updatedDistinction);
+                populateCharacterSFX(
+                  updatedDistinction,
+                  vocationDistinction,
+                  quirkDistinction
+                );
+              }}
               setReady={setReady}
               values={values}
               setModifiedValues={setModifiedValues}
@@ -191,9 +330,23 @@ export const CharacterCreate = ({ currentUser }) => {
           ) : step === 4 ? (
             <VocationSelect
               vocationDistinction={vocationDistinction}
-              setVocationDistinction={setVocationDistinction}
+              setVocationDistinction={(updatedDistinction) => {
+                setVocationDistinction(updatedDistinction);
+                populateCharacterSFX(
+                  kindredDistinction,
+                  updatedDistinction,
+                  quirkDistinction
+                );
+              }}
               quirkDistinction={quirkDistinction}
-              setQuirkDistinction={setQuirkDistinction}
+              setQuirkDistinction={(updatedDistinction) => {
+                setQuirkDistinction(updatedDistinction);
+                populateCharacterSFX(
+                  kindredDistinction,
+                  vocationDistinction,
+                  updatedDistinction
+                );
+              }}
               setReady={setReady}
               values={values}
               setModifiedValues={setModifiedValues}
@@ -218,6 +371,12 @@ export const CharacterCreate = ({ currentUser }) => {
               pointsSpent={valuePointsSpent}
               setPointsSpent={setValuePointsSpent}
             />
+          ) : step === 7 ? (
+            <SFXSelect
+              characterSFX={characterSFX}
+              setCharacterSFX={setCharacterSFX}
+              setReady={setReady}
+            />
           ) : null}
         </Row>
       </Container>
@@ -235,14 +394,14 @@ export const CharacterCreate = ({ currentUser }) => {
           ) : null}
         </Nav>
         <Nav>
-          {ready === step && step < 6 ? (
+          {ready === step && step < 7 ? (
             <Button
               className="custom-nav-button"
               onClick={() => setStep((prev) => prev + 1)}
             >
               <FontAwesomeIcon icon="fa-solid fa-circle-arrow-right" />
             </Button>
-          ) : ready === step && step === 6 ? (
+          ) : ready === step && step === 7 ? (
             <Button
               className="custom-nav-button"
               onClick={() =>
@@ -252,7 +411,8 @@ export const CharacterCreate = ({ currentUser }) => {
                   vocationDistinction,
                   quirkDistinction,
                   characterAttributes,
-                  characterValues
+                  characterValues,
+                  characterSFX
                 )
               }
             >

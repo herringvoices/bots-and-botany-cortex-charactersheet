@@ -20,7 +20,7 @@ export const VocationItem = ({
               <Form.Label className="secondary-span">Select {item}</Form.Label>
               <Form.Select
                 value={value || ""} // Controlled component
-                onChange={(evt) => setter(evt.target.value)} // Update parent state
+                onChange={(evt) => setter(parseInt(evt.target.value, 10))} // Update parent state
               >
                 <option value="" disabled>
                   Select {item.toLowerCase()}
