@@ -83,6 +83,8 @@ export const DistinctionItem = ({
         <Col className="my-auto" xs={{ offset: 4, span: 4 }}>
           <h3>{title}</h3>
         </Col>
+
+        
         <Col xs={{ offset: 2, span: 1 }} className="p-2 text-end">
           {edit ? (
             <Button className="btn-edit" onClick={handleSave} active>
@@ -95,6 +97,8 @@ export const DistinctionItem = ({
           )}
         </Col>
       </Row>
+
+
       <Row>
         <Col className="distinction-item">
           <Row>
@@ -102,6 +106,8 @@ export const DistinctionItem = ({
               <h4>{renderTitle()}</h4>
             </Col>
           </Row>
+
+
           <Row className="text-dark">
             <Col xs={{ offset: 2, span: 2 }}>
               {edit ? (
@@ -110,6 +116,8 @@ export const DistinctionItem = ({
                 </Button>
               ) : null}
             </Col>
+
+
             <Col xs={{ offset: 1, span: 2 }}>
               <DieSize dieSize={distinction?.dieSize} />
             </Col>
@@ -120,7 +128,7 @@ export const DistinctionItem = ({
                 </Button>
               ) : null}
             </Col>
-            <Col xs={2}></Col>
+            
           </Row>
         </Col>
       </Row>

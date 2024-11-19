@@ -29,7 +29,7 @@ export const CharacterHeader = ({ character, setCharacter }) => {
 
   return (
     <Row>
-      <Col md={{ offset: 2, span: 8 }}>
+      <Col md={{ offset: 3, span: 6 }}>
         <Row className="dark-container text-center mt-5 align-items-start">
           <Col md={{ span: 2 }} className="image-column">
             <Image

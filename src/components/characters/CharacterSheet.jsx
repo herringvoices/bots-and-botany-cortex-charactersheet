@@ -17,9 +17,14 @@ import {
   updateQuirkDistinction,
 } from "../../services/distinctionsService";
 import {
+  getCharacterAttributesByCharacterId,
+  updateCharacterAttributes,
+} from "../../services/attributeService";
+import {
   getCharacterValuesByCharacterId,
   updateCharacterValue,
 } from "../../services/valueService";
+import { AttributeItem } from "./CSComponents/AttributeItem"; // Import AttributeItem
 
 export const CharacterSheet = ({ currentUser }) => {
   let { characterId } = useParams();
@@ -41,8 +46,12 @@ export const CharacterSheet = ({ currentUser }) => {
   const [quirkDistinction, setQuirkDistinction] = useState(null);
 
   // Values state
-  const [values, setValues] = useState([]); // All values
-  const [individualValues, setIndividualValues] = useState([]); // Separate states for each value
+  const [expandedValues, setExpandedValues] = useState(null);
+  const [values, setValues] = useState(null);
+
+  // Attributes state
+  const [expandedAttributes, setExpandedAttributes] = useState(null);
+  const [attributes, setAttributes] = useState(null);
 
   const getAndSetState = () => {
     getCharacterById(characterId).then(setCharacter);
@@ -93,12 +102,38 @@ export const CharacterSheet = ({ currentUser }) => {
 
     // Fetch Values
     getCharacterValuesByCharacterId(characterId)
-      .then((fetchedValues) => {
-        setValues(fetchedValues);
-        setIndividualValues(fetchedValues.map((value) => ({ ...value })));
+      .then((prev) => {
+        // Store the entire fetched array into expandedValues
+        setExpandedValues(prev);
+
+        // Remove the 'value' field from each object in the array
+        const nonExpandedValuesArray = prev.map(
+          ({ value, ...nonExpandedValues }) => nonExpandedValues
+        );
+
+        // Set the resulting array without 'value' properties to values
+        setValues(nonExpandedValuesArray);
       })
       .catch((error) => {
-        console.error("Error fetching values:", error);
+        console.error("Error fetching and setting values:", error);
+      });
+
+    // Fetch Attributes
+    getCharacterAttributesByCharacterId(characterId)
+      .then((prev) => {
+        // Store the entire fetched array into expandedAttributes
+        setExpandedAttributes(prev);
+
+        // Remove the 'attribute' field from each object in the array
+        const nonExpandedAttributesArray = prev.map(
+          ({ attribute, ...nonExpandedAttributes }) => nonExpandedAttributes
+        );
+
+        // Set the resulting array without 'attribute' properties to attributes
+        setAttributes(nonExpandedAttributesArray);
+      })
+      .catch((error) => {
+        console.error("Error fetching and setting attributes:", error);
       });
   };
 
@@ -149,20 +184,48 @@ export const CharacterSheet = ({ currentUser }) => {
         <Accordion.Item eventKey="1">
           <Accordion.Header>Values</Accordion.Header>
           <Accordion.Body className="dark-container text-center">
-            <Row>
-              {individualValues.map((value, index) => (
+            <Row className="p-2">
+              {expandedValues?.map((expandedValue) => (
                 <ValueItem
-                  key={value.id}
-                  title={`Value ${index + 1}`}
-                  value={value}
+                  key={expandedValue.id}
+                  title={expandedValue.value.name}
+                  value={values.find((item) => item.id === expandedValue.id)}
                   setValue={(updatedValue) =>
-                    setIndividualValues((prev) =>
+                    setValues((prev) =>
                       prev.map((v) =>
                         v.id === updatedValue.id ? updatedValue : v
                       )
                     )
                   }
                   updateValue={updateCharacterValue}
+                  expandedValue={expandedValue}
+                />
+              ))}
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+
+        {/* Attributes */}
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>Attributes</Accordion.Header>
+          <Accordion.Body className="dark-container text-center">
+            <Row className="p-2">
+              {expandedAttributes?.map((expandedAttribute) => (
+                <AttributeItem
+                  key={expandedAttribute.id}
+                  title={expandedAttribute.attribute.name}
+                  attribute={attributes.find(
+                    (item) => item.id === expandedAttribute.id
+                  )}
+                  setAttribute={(updatedAttribute) =>
+                    setAttributes((prev) =>
+                      prev.map((a) =>
+                        a.id === updatedAttribute.id ? updatedAttribute : a
+                      )
+                    )
+                  }
+                  updateAttribute={updateCharacterAttributes}
+                  expandedAttribute={expandedAttribute}
                 />
               ))}
             </Row>
