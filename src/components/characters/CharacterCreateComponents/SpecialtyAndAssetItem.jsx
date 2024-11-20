@@ -3,7 +3,13 @@ import { Button, Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DieSize } from "../DieSize";
 
-export const SpecialtyAndAssetItem = ({ item, setter, sheet, handleSave }) => {
+export const SpecialtyAndAssetItem = ({
+  item,
+  setter,
+  sheet,
+  handleSave,
+  pointsLeft,
+}) => {
   // State to control edit mode and form input value
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState(item.name);
@@ -145,7 +151,7 @@ export const SpecialtyAndAssetItem = ({ item, setter, sheet, handleSave }) => {
                 <Button
                   className="btn-plus"
                   onClick={handleIncrement}
-                  disabled={pointsLeft || item.dieSize >= (sheet ? 12 : 10)} // Cap die size at 12 if sheet is true, else 10
+                  disabled={!pointsLeft || item.dieSize >= (sheet ? 12 : 10)} // Cap die size at 12 if sheet is true, else 10
                 >
                   <FontAwesomeIcon icon="fa-solid fa-circle-plus" />
                 </Button>

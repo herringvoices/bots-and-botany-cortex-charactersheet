@@ -27,24 +27,12 @@ import {
 } from "../../services/attributeService";
 import { postCharacterValue } from "../../services/valueService";
 import { getExpandedSFX, postCharacterSFX } from "../../services/sfxService";
-import {
-  getSpecialties,
-  postSpecialty,
-} from "../../services/specialtiesService";
-import { getAssets, postAsset } from "../../services/assetsService";
-import { SpecialtiesAndAssetsSelect } from "./CharacterCreateComponents/SpecialtiesAndAssetsSelect";
-import { postCharacterStress } from "../../services/stressService";
 
 export const CharacterCreate = ({ currentUser }) => {
-  const [step, setStep] = useState(1);
-  const [character, setCharacter] = useState({});
-  const [kindredDistinction, setKindredDistinction] = useState({});
-  const [vocationDistinction, setVocationDistinction] = useState({});
-  const [quirkDistinction, setQuirkDistinction] = useState({});
   const [characterAttributes, setCharacterAttributes] = useState([]);
-  const [characterValues, setCharacterValues] = useState([]); // State for values
+  const [characterValues, setCharacterValues] = useState([]);
   const [characterSFX, setCharacterSFX] = useState([]);
-  const [expandedSFX, setExpandedSFX] = useState([]); // state for expanded SFX
+  const [expandedSFX, setExpandedSFX] = useState([]);
   const [ready, setReady] = useState(0);
   const navigate = useNavigate();
   const [values, setValues] = useState([]);
@@ -52,9 +40,9 @@ export const CharacterCreate = ({ currentUser }) => {
   const [attributePoints, setAttributePoints] = useState(11);
   const [valuePointsAvailable, setValuePointsAvailable] = useState(4);
   const [valuePointsSpent, setValuePointsSpent] = useState([]);
-  const [specialties, setSpecialties] = useState([]); // state for specialties
-  const [assets, setAssets] = useState([]); // state for assets
-  const [specialtyAndAssetPoints, setSpecialtyAndAssetPoints] = useState(5); // Points for specialties and assets
+  const [specialties, setSpecialties] = useState([]);
+  const [assets, setAssets] = useState([]);
+  const [specialtyAndAssetPoints, setSpecialtyAndAssetPoints] = useState(5);
 
   // Initialize state on first render
   useEffect(() => {
@@ -141,7 +129,13 @@ export const CharacterCreate = ({ currentUser }) => {
         // Initialize specialties and assets
         setSpecialties([]);
         setAssets([]);
-        setSpecialtyAndAssetPoints(8);
+        setSpecialtyAndAssetPoints(5);
+
+        const fetchedSpecialties = await getSpecialties();
+        setSpecialties(fetchedSpecialties);
+
+        const fetchedAssets = await getAssets();
+        setAssets(fetchedAssets);
       } catch (error) {
         console.error("Error initializing data:", error);
       }
@@ -249,28 +243,18 @@ export const CharacterCreate = ({ currentUser }) => {
     assets,
     specialties
   ) => {
-    // Only keep serializable fields of character object
-    const shallowCharacterCopy = {
-      userId: character.userId,
-      name: character.name,
-      pronouns: character.pronouns,
-      plotPoints: character.plotPoints,
-      description: character.description,
-      image: character.image, // Ensure `image` is a URL or serializable representation
-    };
+    const shallowCharacterCopy = { ...character };
 
     postCharacter(shallowCharacterCopy)
       .then((characterResponse) => {
-        if (!characterResponse) {
-          throw new Error("Character response is undefined");
-        }
-
         // Update characterId in distinctions and attributes
         const updatedAttributes = characterAttributes.map((attr) => ({
           characterId: characterResponse.id, // Use characterResponse.id
           attributeId: attr.id,
           dieSize: attr.dieSize,
         }));
+
+        setCharacterAttributes(updatedAttributes);
 
         // Update characterId for distinctions
         kindredDistinction.characterId = characterResponse.id;
@@ -507,22 +491,7 @@ export const CharacterCreate = ({ currentUser }) => {
             </Button>
           )}
           {ready === step && step === 8 && (
-            <Button
-              className="custom-nav-button"
-              onClick={() =>
-                handleSubmit(
-                  character,
-                  kindredDistinction,
-                  vocationDistinction,
-                  quirkDistinction,
-                  characterAttributes,
-                  characterValues,
-                  characterSFX,
-                  assets,
-                  specialties
-                )
-              }
-            >
+            <Button className="custom-nav-button" onClick={handleSubmit}>
               <FontAwesomeIcon icon="fa-solid fa-circle-check" />
             </Button>
           )}
