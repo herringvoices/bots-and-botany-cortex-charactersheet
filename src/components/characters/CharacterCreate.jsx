@@ -27,6 +27,13 @@ import {
 } from "../../services/attributeService";
 import { postCharacterValue } from "../../services/valueService";
 import { getExpandedSFX, postCharacterSFX } from "../../services/sfxService";
+import {
+  getSpecialties,
+  postSpecialty,
+} from "../../services/specialtiesService";
+import { getAssets, postAsset } from "../../services/assetsService";
+import { SpecialtiesAndAssetsSelect } from "./CharacterCreateComponents/SpecialtiesAndAssetsSelect";
+import { postCharacterStress } from "../../services/stressService";
 
 export const CharacterCreate = ({ currentUser }) => {
   const [step, setStep] = useState(1);
@@ -37,7 +44,7 @@ export const CharacterCreate = ({ currentUser }) => {
   const [characterAttributes, setCharacterAttributes] = useState([]);
   const [characterValues, setCharacterValues] = useState([]); // State for values
   const [characterSFX, setCharacterSFX] = useState([]);
-  const [expandedSFX, setExpandedSFX] = useState([]); // New state for expanded SFX
+  const [expandedSFX, setExpandedSFX] = useState([]); // state for expanded SFX
   const [ready, setReady] = useState(0);
   const navigate = useNavigate();
   const [values, setValues] = useState([]);
@@ -45,88 +52,137 @@ export const CharacterCreate = ({ currentUser }) => {
   const [attributePoints, setAttributePoints] = useState(11);
   const [valuePointsAvailable, setValuePointsAvailable] = useState(4);
   const [valuePointsSpent, setValuePointsSpent] = useState([]);
+  const [specialties, setSpecialties] = useState([]); // state for specialties
+  const [assets, setAssets] = useState([]); // state for assets
+  const [specialtyAndAssetPoints, setSpecialtyAndAssetPoints] = useState(5); // Points for specialties and assets
 
   // Initialize state on first render
   useEffect(() => {
-    if (Object.keys(character).length === 0) {
-      setCharacter({
-        userId: currentUser.id,
-        name: "",
-        pronouns: "",
-        plotPoints: 0,
-        description: "",
-        image: "",
-      });
-    }
+    const initializeCharacterState = () => {
+      setCharacter((prev) =>
+        Object.keys(prev).length === 0
+          ? {
+              userId: currentUser.id,
+              name: "",
+              pronouns: "",
+              plotPoints: 0,
+              description: "",
+              image: "",
+            }
+          : prev
+      );
 
-    if (Object.keys(kindredDistinction).length === 0) {
-      setKindredDistinction({
-        characterId: 0,
-        speciesId: 0,
-        backgroundId: 0,
-        dieSize: 8,
-      });
-    }
+      setKindredDistinction((prev) =>
+        Object.keys(prev).length === 0
+          ? {
+              characterId: 0,
+              speciesId: 0,
+              backgroundId: 0,
+              dieSize: 8,
+            }
+          : prev
+      );
 
-    if (Object.keys(vocationDistinction).length === 0) {
-      setVocationDistinction({
-        characterId: 0,
-        adjectiveId: 0,
-        jobId: 0,
-        dieSize: 8,
-      });
-    }
+      setVocationDistinction((prev) =>
+        Object.keys(prev).length === 0
+          ? {
+              characterId: 0,
+              adjectiveId: 0,
+              jobId: 0,
+              dieSize: 8,
+            }
+          : prev
+      );
 
-    if (Object.keys(quirkDistinction).length === 0) {
-      setQuirkDistinction({
-        characterId: 0,
-        quirkId: 0,
-        dieSize: 8,
-      });
-    }
+      setQuirkDistinction((prev) =>
+        Object.keys(prev).length === 0
+          ? {
+              characterId: 0,
+              quirkId: 0,
+              dieSize: 8,
+            }
+          : prev
+      );
+    };
 
-    getValues().then((values) => {
-      setValues(values);
+    const initializeValues = async () => {
+      try {
+        const values = await getValues();
+        setValues(values);
 
-      const initialPointsSpent = values.map((value) => ({
-        valueId: value.id,
-        pointsSpent: 0,
-      }));
-      setValuePointsSpent(initialPointsSpent);
+        const initialPointsSpent = values.map((value) => ({
+          valueId: value.id,
+          pointsSpent: 0,
+        }));
+        setValuePointsSpent(initialPointsSpent);
 
-      // Initialize characterValues with valueId, characterId, and dieSize
-      const initializedValues = values.map((value) => ({
-        valueId: value.id, // Set valueId equal to value.id
-        characterId: currentUser.id, // Set characterId equal to currentUser.id
-        dieSize: 4, // Initialize dieSize at 4
-      }));
-      setCharacterValues(initializedValues);
-    });
+        // Initialize characterValues with valueId, characterId, and dieSize
+        const initializedValues = values.map((value) => ({
+          valueId: value.id,
+          characterId: currentUser.id,
+          dieSize: 4,
+        }));
+        setCharacterValues(initializedValues);
 
-    const newValues = [];
-    for (let i = 1; i < 6; i++) {
-      newValues.push({ id: i, characterId: currentUser.id, valueId: 0 });
-    }
-    setModifiedValues(newValues);
+        const newValues = Array.from({ length: 5 }, (_, i) => ({
+          id: i + 1,
+          characterId: currentUser.id,
+          valueId: 0,
+        }));
+        setModifiedValues(newValues);
+      } catch (error) {
+        console.error("Error fetching values:", error);
+      }
+    };
 
-    // Fetch attributes and initialize characterAttributes
-    getAttributes()
-      .then((attributes) => {
+    const initializeAttributes = async () => {
+      try {
+        const attributes = await getAttributes();
         const initializedAttributes = attributes.map((attr) => ({
           ...attr,
           characterId: 0,
           dieSize: 4,
         }));
         setCharacterAttributes(initializedAttributes);
-      })
-      .catch((error) => console.error("Error fetching attributes:", error));
+      } catch (error) {
+        console.error("Error fetching attributes:", error);
+      }
+    };
 
-    // Fetch expanded SFX and set state
-    getExpandedSFX()
-      .then((sfxData) => {
+    const initializeExpandedSFX = async () => {
+      try {
+        const sfxData = await getExpandedSFX();
         setExpandedSFX(sfxData);
-      })
-      .catch((error) => console.error("Error fetching expanded SFX:", error));
+      } catch (error) {
+        console.error("Error fetching expanded SFX:", error);
+      }
+    };
+
+    const initializeSpecialtiesAndAssets = async () => {
+      setSpecialties([]);
+      setAssets([]);
+      setSpecialtyAndAssetPoints(5);
+
+      try {
+        const fetchedSpecialties = await getSpecialties();
+        setSpecialties(fetchedSpecialties);
+      } catch (error) {
+        console.error("Error fetching specialties:", error);
+      }
+
+      try {
+        const fetchedAssets = await getAssets();
+        setAssets(fetchedAssets);
+      } catch (error) {
+        console.error("Error fetching assets:", error);
+      }
+    };
+
+    initializeCharacterState();
+    initializeValues();
+    initializeAttributes();
+    initializeExpandedSFX();
+    initializeSpecialtiesAndAssets();
   }, [currentUser]);
 
   const populateCharacterSFX = (kindred, vocation, quirk) => {
@@ -224,15 +280,18 @@ export const CharacterCreate = ({ currentUser }) => {
     quirkDistinction,
     characterAttributes,
     characterValues,
-    characterSFX
+    characterSFX,
+    assets,
+    specialties
   ) => {
     const shallowCharacterCopy = { ...character };
 
+    // Step 1: Post character
     postCharacter(shallowCharacterCopy)
       .then((characterResponse) => {
-        // Update characterId in distinctions and attributes
+        // Step 2: Update characterId in distinctions and attributes
         const updatedAttributes = characterAttributes.map((attr) => ({
-          characterId: characterResponse.id, // Use characterResponse.id
+          characterId: characterResponse.id,
           attributeId: attr.id,
           dieSize: attr.dieSize,
         }));
@@ -244,7 +303,7 @@ export const CharacterCreate = ({ currentUser }) => {
 
         // Update characterId in characterValues
         const updatedCharacterValues = characterValues.map((value) => ({
-          characterId: characterResponse.id, // Use characterResponse.id
+          characterId: characterResponse.id,
           dieSize: value.dieSize,
           valueId: value.id,
           description: "", // Default to an empty string
@@ -253,10 +312,34 @@ export const CharacterCreate = ({ currentUser }) => {
         // Update characterId in characterSFX
         const updatedCharacterSFX = characterSFX.map((sfx) => ({
           ...sfx,
-          characterId: characterResponse.id, // Use characterResponse.id
+          characterId: characterResponse.id,
         }));
 
-        // Add the Hinder SFX to characterSFX
+        // Step 3: Update characterId in assets
+        const updatedAssets = assets.map((asset) => ({
+          characterId: characterResponse.id,
+          name: asset.name,
+          dieSize: asset.dieSize,
+        }));
+
+        // Step 4: Update characterId in specialties
+        const updatedSpecialties = specialties.map((specialty) => ({
+          characterId: characterResponse.id,
+          name: specialty.name,
+          dieSize: specialty.dieSize,
+        }));
+
+        // Step 5: Prepare six characterStresses to post (stressId: 1-6)
+        const characterStresses = [];
+        for (let i = 1; i < 7; i++) {
+          characterStresses.push({
+            characterId: characterResponse.id,
+            stressId: i,
+            dieSize: 0,
+          });
+        }
+
+        // Step 6: Add the Hinder SFX to characterSFX
         const hinderSFX = {
           characterId: characterResponse.id,
           sfxId: 101,
@@ -266,7 +349,7 @@ export const CharacterCreate = ({ currentUser }) => {
           locked: false,
         };
 
-        // Post all distinctions, attributes, characterValues, and characterSFX concurrently
+        // Step 7: Post all distinctions, attributes, characterValues, characterSFX, assets, specialties, and stresses concurrently
         return Promise.all([
           postKindredDistinction(kindredDistinction),
           postVocationDistinction(vocationDistinction),
@@ -275,15 +358,63 @@ export const CharacterCreate = ({ currentUser }) => {
           ...updatedCharacterValues.map((value) => postCharacterValue(value)),
           ...updatedCharacterSFX.map((sfx) => postCharacterSFX(sfx)),
           postCharacterSFX(hinderSFX),
+          ...updatedAssets.map((asset) => postAsset(asset)),
+          ...updatedSpecialties.map((specialty) => postSpecialty(specialty)),
+          ...characterStresses.map((stress) => postCharacterStress(stress)), // Posting 6 stress objects
         ]);
       })
       .then(() => {
+        // Step 8: Navigate to the character view page
         navigate("/characters/view");
       })
       .catch((error) => {
         console.error("Error during submission:", error);
       });
   };
+
+  useEffect(() => {
+    const calculateSpecialtyAndAssetPoints = () => {
+      // Calculate the total die size for specialties
+      const totalSpecialtyDieSize = specialties.reduce(
+        (sum, item) => sum + item.dieSize,
+        0
+      );
+
+      // Calculate the total die size for assets
+      const totalAssetDieSize = assets.reduce(
+        (sum, item) => sum + item.dieSize,
+        0
+      );
+
+      // Calculate the total number of specialties and assets
+      const totalLength = specialties.length + assets.length;
+
+      // Calculate points spent
+      const pointsSpent =
+        (totalSpecialtyDieSize + totalAssetDieSize - 2 * totalLength) / 2;
+
+      // Calculate points available
+      const pointsAvailable = 8 - pointsSpent;
+
+      // Set the available points in the state
+      setSpecialtyAndAssetPoints(pointsAvailable);
+    };
+
+    calculateSpecialtyAndAssetPoints();
+  }, [specialties, assets]);
+
+  {
+    /* useEffect to update 'setReady' when 'specialtyAndAssetPoints' changes */
+  }
+  {
+    useEffect(() => {
+      if (specialtyAndAssetPoints === 0) {
+        setReady(8);
+      } else {
+        setReady(7);
+      }
+    }, [specialtyAndAssetPoints, setReady]);
+  }
 
   return (
     <>
@@ -307,10 +438,8 @@ export const CharacterCreate = ({ currentUser }) => {
                   quirkDistinction
                 );
               }}
-              setReady={setReady}
-              character={character}
-              values={values}
               setModifiedValues={setModifiedValues}
+              setReady={setReady}
             />
           ) : step === 3 ? (
             <BackgroundSelect
@@ -377,6 +506,23 @@ export const CharacterCreate = ({ currentUser }) => {
               setCharacterSFX={setCharacterSFX}
               setReady={setReady}
             />
+          ) : step === 8 ? (
+            <>
+              <h2>Select your Specialties and Assets!</h2>
+              <p>Points Available: {specialtyAndAssetPoints}</p>
+              <SpecialtiesAndAssetsSelect
+                array={specialties}
+                setter={setSpecialties}
+                pointsLeft={specialtyAndAssetPoints}
+                title="Specialties"
+              />
+              <SpecialtiesAndAssetsSelect
+                array={assets}
+                setter={setAssets}
+                pointsLeft={specialtyAndAssetPoints}
+                title="Assets"
+              />
+            </>
           ) : null}
         </Row>
       </Container>
@@ -394,14 +540,14 @@ export const CharacterCreate = ({ currentUser }) => {
           ) : null}
         </Nav>
         <Nav>
-          {ready === step && step < 7 ? (
+          {ready === step && step < 8 ? (
             <Button
               className="custom-nav-button"
               onClick={() => setStep((prev) => prev + 1)}
             >
               <FontAwesomeIcon icon="fa-solid fa-circle-arrow-right" />
             </Button>
-          ) : ready === step && step === 7 ? (
+          ) : ready === step && step === 8 ? (
             <Button
               className="custom-nav-button"
               onClick={() =>
@@ -412,7 +558,9 @@ export const CharacterCreate = ({ currentUser }) => {
                   quirkDistinction,
                   characterAttributes,
                   characterValues,
-                  characterSFX
+                  characterSFX,
+                  assets,
+                  specialties
                 )
               }
             >

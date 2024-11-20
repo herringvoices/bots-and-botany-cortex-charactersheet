@@ -39,7 +39,9 @@ export const SpeciesSelect = ({
   // Set selected species when kindredDistinction.speciesId or species change.
   useEffect(() => {
     setSelectedSpecies(
-      species.find((item) => item.id === parseInt(kindredDistinction.speciesId))
+      species?.find(
+        (item) => item.id === parseInt(kindredDistinction.speciesId)
+      )
     );
   }, [kindredDistinction, species]);
 
@@ -49,7 +51,7 @@ export const SpeciesSelect = ({
       setCharacter({ ...character, image: selectedSpecies.image });
 
       // Find and set the value associated with the selected species.
-      const foundValue = values.find(
+      const foundValue = values?.find(
         (item) => item.id === selectedSpecies.valueId
       );
       setSelectedValue(foundValue);
