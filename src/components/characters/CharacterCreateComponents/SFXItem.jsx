@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
 
-export const SFXItem = ({ sfx, locked, toggleLockStatus, disabled }) => {
+export const SFXItem = ({ sfx, locked, toggleLockStatus, disabled, sheet }) => {
   return (
     <Row
       className={`${
@@ -15,7 +15,13 @@ export const SFXItem = ({ sfx, locked, toggleLockStatus, disabled }) => {
       </Col>
       <Col xs={2} className="text-end">
         <Button
-          onClick={toggleLockStatus}
+          onClick={
+            !sheet
+              ? toggleLockStatus
+              : () => {
+                  toggleLockStatus(sfx);
+                }
+          }
           className={!locked ? "btn-edit-dark" : "btn-edit"}
           disabled={locked && disabled}
         >

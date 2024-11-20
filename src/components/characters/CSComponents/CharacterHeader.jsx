@@ -38,7 +38,7 @@ export const CharacterHeader = ({ character, setCharacter }) => {
               src={character?.image}
             />
           </Col>
-          <Col md={{ span: 2 }} className="my-auto text-start">
+          <Col md={{ span: 8 }} className="my-auto text-start">
             {edit ? (
               <Form>
                 <Form.Group controlId="characterName">

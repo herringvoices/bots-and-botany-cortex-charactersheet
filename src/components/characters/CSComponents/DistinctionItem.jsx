@@ -9,7 +9,7 @@ export const DistinctionItem = ({
   distinction, // Non-expanded distinction data
   setDistinction, // Setter for the distinction
   updateDistinction, // Function to update distinction on the server
-  getAndSetState, // Function to re-fetch and set state
+  getAndSet, // Function to re-fetch and set state
 }) => {
   const [edit, setEdit] = useState(false);
 
@@ -20,9 +20,9 @@ export const DistinctionItem = ({
   // Fetch data or set distinction state as needed
   useEffect(() => {
     if (!expandedDistinction) {
-      getAndSetState();
+      getAndSet();
     }
-  }, [expandedDistinction, getAndSetState]);
+  }, [expandedDistinction, getAndSet]);
 
   // Increment dieSize by 2, up to a maximum of 12
   const handleIncrement = () => {
@@ -84,7 +84,6 @@ export const DistinctionItem = ({
           <h3>{title}</h3>
         </Col>
 
-        
         <Col xs={{ offset: 2, span: 1 }} className="p-2 text-end">
           {edit ? (
             <Button className="btn-edit" onClick={handleSave} active>
@@ -98,7 +97,6 @@ export const DistinctionItem = ({
         </Col>
       </Row>
 
-
       <Row>
         <Col className="distinction-item">
           <Row>
@@ -106,7 +104,6 @@ export const DistinctionItem = ({
               <h4>{renderTitle()}</h4>
             </Col>
           </Row>
-
 
           <Row className="text-dark">
             <Col xs={{ offset: 2, span: 2 }}>
@@ -116,7 +113,6 @@ export const DistinctionItem = ({
                 </Button>
               ) : null}
             </Col>
-
 
             <Col xs={{ offset: 1, span: 2 }}>
               <DieSize dieSize={distinction?.dieSize} />
@@ -128,7 +124,6 @@ export const DistinctionItem = ({
                 </Button>
               ) : null}
             </Col>
-            
           </Row>
         </Col>
       </Row>
