@@ -1,12 +1,44 @@
 // CharacterHeader.js
 import React, { useState } from "react";
-import { Button, Col, Row, Image, Form } from "react-bootstrap";
+import { Button, Col, Row, Image, Form, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { updateCharacter } from "../../../services/Service";
 import PPItem from "./PPItem";
+import { handleProfilePictureUpload } from "../../../services/cloudinaryService";
 
 export const CharacterHeader = ({ character, setCharacter }) => {
   const [edit, setEdit] = useState(false);
+  const [imageSelected, setImageSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(character?.image || null);
+
+  const handleFileChange = (e) => {
+    setImageSelected(e.target.files[0]);
+  };
+
+  const handleUpload = async (e) => {
+    if (!imageSelected) {
+      alert("Please select an image first.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const optimizedUrl = await handleProfilePictureUpload(imageSelected);
+      setImageUrl(optimizedUrl);
+      const updatedCharacter = { ...character, image: optimizedUrl };
+      await updateCharacter(updatedCharacter);
+      setCharacter(updatedCharacter);
+      alert("Image uploaded and character updated successfully!");
+    } catch (error) {
+      console.error("Image upload failed", error);
+      alert("Failed to upload image. Please try again.");
+      e.target.value = "";
+    }
+
+    setLoading(false);
+  };
 
   // Handle changes to form fields
   const handleChange = (e) => {
@@ -38,6 +70,37 @@ export const CharacterHeader = ({ character, setCharacter }) => {
               className="character-image"
               src={character?.image}
             />
+            {edit ? (
+              <Form>
+                <Form.Group controlId="formFile">
+                  <Form.Label>Upload Image</Form.Label>
+                  <Form.Control type="file" onChange={handleFileChange} />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  onClick={handleUpload}
+                  disabled={loading}
+                  className="my-2"
+                >
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      Uploading...
+                    </>
+                  ) : (
+                    "Upload Image"
+                  )}
+                </Button>
+              </Form>
+            ) : (
+              ""
+            )}
           </Col>
           <Col xs={6} md={5} className="my-auto text-start">
             {edit ? (
