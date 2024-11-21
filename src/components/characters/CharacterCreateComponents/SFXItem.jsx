@@ -14,23 +14,27 @@ export const SFXItem = ({ sfx, locked, toggleLockStatus, disabled, sheet }) => {
         <p>{sfx.description}</p>
       </Col>
       <Col xs={2} className="text-end">
-        <Button
-          onClick={
-            !sheet
-              ? toggleLockStatus
-              : () => {
-                  toggleLockStatus(sfx);
-                }
-          }
-          className={!locked ? "btn-edit-dark" : "btn-edit"}
-          disabled={locked && disabled}
-        >
-          {locked ? (
-            <FontAwesomeIcon icon="fa-solid fa-lock" />
-          ) : (
-            <FontAwesomeIcon icon="fa-solid fa-lock-open" />
-          )}
-        </Button>
+        {sfx.name !== "Hinder" ? (
+          <Button
+            onClick={
+              !sheet
+                ? toggleLockStatus
+                : () => {
+                    toggleLockStatus(sfx);
+                  }
+            }
+            className={!locked ? "btn-edit-dark" : "btn-edit"}
+            disabled={locked && disabled}
+          >
+            {locked ? (
+              <FontAwesomeIcon icon="fa-solid fa-lock" />
+            ) : (
+              <FontAwesomeIcon icon="fa-solid fa-lock-open" />
+            )}
+          </Button>
+        ) : (
+          ""
+        )}
       </Col>
     </Row>
   );

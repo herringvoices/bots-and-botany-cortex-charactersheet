@@ -5,12 +5,14 @@ import { DieSize } from "../DieSize";
 
 const SpecialtyAndAssetItem = ({
   item,
+  title,
   setter,
   sheet,
   pointsLeft,
   updater,
   deleter,
-  isNameEditable = true,
+  isNameEditable,
+  type,
 }) => {
   // State to control edit mode and form input value
   const [edit, setEdit] = useState(false);
@@ -20,7 +22,9 @@ const SpecialtyAndAssetItem = ({
   const handleIncrement = () => {
     setter((prevArray) =>
       prevArray.map((prevItem) =>
-        prevItem.id === item?.id
+        prevItem.id === item?.id && prevItem.dieSize < 4
+          ? { ...prevItem, dieSize: prevItem.dieSize + 4 }
+          : prevItem.id === item?.id
           ? { ...prevItem, dieSize: prevItem.dieSize + 2 }
           : prevItem
       )
@@ -33,6 +37,8 @@ const SpecialtyAndAssetItem = ({
       prevArray.map((prevItem) =>
         prevItem.id === item?.id && prevItem.dieSize > 4
           ? { ...prevItem, dieSize: prevItem.dieSize - 2 }
+          : prevItem.id === item?.id && prevItem.dieSize > 0
+          ? { ...prevItem, dieSize: prevItem.dieSize - 4 }
           : prevItem
       )
     );
@@ -106,7 +112,7 @@ const SpecialtyAndAssetItem = ({
           <Row>
             {/* Edit/Save Button - always render Col, buttons are conditional */}
             <Col xs={3} className="p-2 text-center">
-              {sheet && isNameEditable && (
+              {sheet && (
                 <>
                   {edit ? (
                     <Button className="btn-edit-dark" onClick={onSave} active>
@@ -134,7 +140,7 @@ const SpecialtyAndAssetItem = ({
                   className="text-center mb-2"
                 />
               ) : (
-                <h4>{item?.name}</h4>
+                <h4>{isNameEditable ? item?.name : title}</h4>
               )}
             </Col>
 
@@ -156,7 +162,7 @@ const SpecialtyAndAssetItem = ({
                 <Button
                   className="btn-plus"
                   onClick={handleDecrement}
-                  disabled={item?.dieSize <= 4} // Disable if dieSize is at minimum (4)
+                  disabled={item?.dieSize <= (type === "stress" ? 0 : 4)} // Disable if dieSize is at minimum (4)
                 >
                   <FontAwesomeIcon icon="fa-solid fa-circle-minus" />
                 </Button>

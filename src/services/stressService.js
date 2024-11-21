@@ -19,7 +19,9 @@ export const getAllStresses = () => {
 
 // GET: Fetch all character stresses by characterId
 export const getCharacterStressesByCharacterId = (characterId) => {
-  return fetch(`${api}/characterStresses?characterId=${characterId}`)
+  return fetch(
+    `${api}/characterStresses?characterId=${characterId}&_expand=stress`
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

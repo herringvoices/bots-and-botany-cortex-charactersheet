@@ -35,6 +35,7 @@ export const SpecialtiesAndAssetsSelect = ({
             pointsLeft={pointsLeft}
             deleter={true}
             isNameEditable={true}
+            title={item.name}
           />
         ))}
       </Row>

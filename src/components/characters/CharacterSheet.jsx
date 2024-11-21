@@ -44,6 +44,10 @@ import {
   updateAsset,
 } from "../../services/assetsService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  getCharacterStressesByCharacterId,
+  updateCharacterStress,
+} from "../../services/stressService";
 
 export const CharacterSheet = ({ currentUser }) => {
   let { characterId } = useParams();
@@ -76,8 +80,14 @@ export const CharacterSheet = ({ currentUser }) => {
   const [unlockedSFX, setUnlockedSFX] = useState([]);
   const [lockedSFX, setLockedSFX] = useState([]);
   const [SFX, setSFX] = useState([]);
+
+  //Specialties and Assets State
   const [specialties, setSpecialties] = useState([]);
   const [assets, setAssets] = useState([]);
+
+  //Stresses State
+  const [expandedStresses, setExpandedStresses] = useState(null);
+  const [characterStresses, setCharacterStresses] = useState(null);
 
   // Fetch and set functions for each part of the state
   const getAndSetCharacter = async () => {
@@ -86,6 +96,21 @@ export const CharacterSheet = ({ currentUser }) => {
       setCharacter(character);
     } catch (error) {
       console.error("Error fetching and setting character:", error);
+    }
+  };
+
+  // Function to GET fetch stresses and update state
+  const getAndSetStresses = async () => {
+    try {
+      const stresses = await getCharacterStressesByCharacterId(characterId);
+      setExpandedStresses(stresses);
+
+      const nonExpandedStressesArray = stresses.map(
+        ({ stress, ...nonExpandedStresses }) => nonExpandedStresses
+      );
+      setCharacterStresses(nonExpandedStressesArray);
+    } catch (error) {
+      console.error("Error fetching and setting stresses:", error);
     }
   };
 
@@ -200,6 +225,7 @@ export const CharacterSheet = ({ currentUser }) => {
         getAndSetQuirkDistinction(),
         getAndSetValues(),
         getAndSetAttributes(),
+        getAndSetStresses(),
         getAndSetSFX(),
         getAndSetSpecialties(),
         getAndSetAssets(),
@@ -445,6 +471,32 @@ export const CharacterSheet = ({ currentUser }) => {
                   updater={updateAsset}
                   deleter={deleteAsset}
                   pointsLeft={true}
+                  title={item.name}
+                />
+              ))}
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+
+        {/* Stress */}
+        <Accordion.Item eventKey="6">
+          <Accordion.Header>Stress</Accordion.Header>
+          <Accordion.Body className="dark-container text-center">
+            <Row>
+              {expandedStresses?.map((expandedStress) => (
+                <ComponentItem
+                  key={expandedStress.id}
+                  item={characterStresses.find(
+                    (thisStress) => thisStress.id === expandedStress.id
+                  )}
+                  sheet={true}
+                  setter={setCharacterStresses}
+                  updater={updateCharacterStress}
+                  deleter={false}
+                  pointsLeft={true}
+                  title={expandedStress.stress?.name}
+                  isNameEditable={false}
+                  type="stress"
                 />
               ))}
             </Row>
