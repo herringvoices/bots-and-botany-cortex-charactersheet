@@ -48,6 +48,7 @@ import {
   getCharacterStressesByCharacterId,
   updateCharacterStress,
 } from "../../services/stressService";
+import { handleProfilePictureUpload } from "../../services/cloudinaryService";
 
 export const CharacterSheet = ({ currentUser }) => {
   let { characterId } = useParams();
@@ -88,6 +89,9 @@ export const CharacterSheet = ({ currentUser }) => {
   //Stresses State
   const [expandedStresses, setExpandedStresses] = useState(null);
   const [characterStresses, setCharacterStresses] = useState(null);
+
+  //Character image State
+  const [imageSelected, setImageSelected] = useState(null);
 
   // Fetch and set functions for each part of the state
   const getAndSetCharacter = async () => {
@@ -473,6 +477,7 @@ export const CharacterSheet = ({ currentUser }) => {
                   deleter={deleteAsset}
                   pointsLeft={true}
                   title={item.name}
+                  isNameEditable={true}
                 />
               ))}
             </Row>
