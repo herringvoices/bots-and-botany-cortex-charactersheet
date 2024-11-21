@@ -13,7 +13,7 @@ export const VocationItem = ({
 
   return (
     <>
-      <Col md={{ span: 4 }} className="select-column">
+      <Col className="select-column">
         <div className="mt-3 mb-3">
           <Form>
             <Form.Group className="mb-3" controlId={`form${item}`}>
@@ -37,19 +37,15 @@ export const VocationItem = ({
             <>
               <h2>{selectedItem.name}</h2>
               <p>{selectedItem.description}</p>
-              {sfx?.length > 0 && (
-                <>
-                  <h2>SFX</h2>
-                  {(() => {
-                    const [effect] = sfx; // Destructure the single object from the array
-                    return (
-                      <p>
-                        <b>{effect.name}:</b> {effect.description}
-                      </p>
-                    );
-                  })()}
-                </>
-              )}
+
+              <>
+                <h2>SFX</h2>
+                <p>
+                  <b>{sfx?.name}:</b>
+                </p>
+                <p>{sfx?.description}</p>
+              </>
+
               {selectedValue && (
                 <>
                   <h2>{item} Value</h2>

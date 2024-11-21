@@ -437,6 +437,7 @@ export const CharacterCreate = ({ currentUser }) => {
               setReady={setReady}
               values={values}
               setModifiedValues={setModifiedValues}
+              characterSFX={characterSFX}
             />
           ) : step === 5 ? (
             <AttributeSelect

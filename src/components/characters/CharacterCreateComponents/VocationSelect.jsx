@@ -18,6 +18,7 @@ export const VocationSelect = ({
   setReady,
   values, // Shared values from parent
   setModifiedValues, // Function to update modifiedValues in parent
+  characterSFX,
 }) => {
   const [adjectives, setAdjectives] = useState([]);
   const [selectedAdjective, setSelectedAdjective] = useState(null);
@@ -27,6 +28,10 @@ export const VocationSelect = ({
 
   const [quirks, setQuirks] = useState([]);
   const [selectedQuirk, setSelectedQuirk] = useState(null);
+
+  const [jobSFX, setJobSFX] = useState([]);
+  const [adjectiveSFX, setAdjectiveSFX] = useState([]);
+  const [quirkSFX, setQuirkSFX] = useState([]);
 
   // Fetch data for adjectives, jobs, and quirks from the server
   useEffect(() => {
@@ -125,6 +130,12 @@ export const VocationSelect = ({
     } else {
       setReady(3);
     }
+
+    if (characterSFX) {
+      setAdjectiveSFX(characterSFX[6]);
+      setJobSFX(characterSFX[7]);
+      setQuirkSFX(characterSFX[8]);
+    }
   }, [vocationDistinction, quirkDistinction]);
 
   return (
@@ -133,7 +144,7 @@ export const VocationSelect = ({
         {/* Dropdown for Adjectives */}
         <VocationItem
           item={"Adjectives"}
-          sfx={[]} // Placeholder for special effects
+          sfx={adjectiveSFX} // Placeholder for special effects
           array={adjectives} // Options for the dropdown
           setter={(value) =>
             setVocationDistinction({
@@ -150,7 +161,7 @@ export const VocationSelect = ({
         {/* Dropdown for Jobs */}
         <VocationItem
           item={"Jobs"}
-          sfx={[]} // Placeholder for special effects
+          sfx={jobSFX} // Placeholder for special effects
           array={jobs} // Options for the dropdown
           setter={(value) =>
             setVocationDistinction({
@@ -163,11 +174,12 @@ export const VocationSelect = ({
             (item) => item.id === selectedJob?.valueId
           )}
         />
-
+      </Row>
+      <Row>
         {/* Dropdown for Quirks */}
         <VocationItem
           item={"Quirks"}
-          sfx={[]} // Placeholder for special effects
+          sfx={quirkSFX} // Placeholder for special effects
           array={quirks} // Options for the dropdown
           setter={(value) =>
             setQuirkDistinction({
