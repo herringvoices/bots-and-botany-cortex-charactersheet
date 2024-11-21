@@ -204,6 +204,23 @@
   transform: scale(1.25) !important;
 }
 
+.plot-points {
+  font-size: 2em !important; /* Sets the size of the font */
+  color: var(
+    --primary-color
+  ) !important; /* Uses the primary color for the text */
+  background-color: var(
+    --dark-color
+  ) !important; /* Uses the dark color for the background */
+  width: 1.5em !important; /* Ensure the width and height are the same to create a circle */
+  border-radius: 50% !important; /* Makes it a perfect circle */
+  display: flex !important; /* Flex to center the text */
+  align-items: center !important; /* Vertically centers the text */
+  justify-content: center !important; /* Horizontally centers the text */
+  text-align: center !important; /* Centers text in the case of multiline (just in case) */
+  margin: 0.5em !important; /* Adds a little space around it */
+}
+
 .btn-plus-dark:active {
   background-color: var(
     --dark-color

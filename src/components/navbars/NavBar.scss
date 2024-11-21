@@ -1,6 +1,6 @@
 @import "../../variables.scss";
 .navbar {
-  background-color: var(--dark-color) !important;
+  background-color: var(--dark-color-transparent) !important;
   color: var(--primary-color) !important;
   padding: 0;
   font-size: 1.5em;
@@ -9,6 +9,7 @@
 .logo {
   width: 100px;
   margin: 0;
+  margin-right: 10px;
   padding: 0;
 }
 

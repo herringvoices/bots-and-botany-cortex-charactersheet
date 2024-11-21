@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Col, Row, Image, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { updateCharacter } from "../../../services/Service";
+import PPItem from "./PPItem";
 
 export const CharacterHeader = ({ character, setCharacter }) => {
   const [edit, setEdit] = useState(false);
@@ -29,16 +30,16 @@ export const CharacterHeader = ({ character, setCharacter }) => {
 
   return (
     <Row>
-      <Col md={{ offset: 3, span: 6 }}>
+      <Col>
         <Row className="dark-container text-center mt-5 align-items-start">
-          <Col md={{ span: 2 }} className="image-column">
+          <Col xs={4} md={2} className="image-column">
             <Image
               roundedCircle
               className="character-image"
               src={character?.image}
             />
           </Col>
-          <Col md={{ span: 8 }} className="my-auto text-start">
+          <Col xs={6} md={5} className="my-auto text-start">
             {edit ? (
               <Form>
                 <Form.Group controlId="characterName">
@@ -67,7 +68,7 @@ export const CharacterHeader = ({ character, setCharacter }) => {
               </div>
             )}
           </Col>
-          <Col className=" text-end p-2">
+          <Col className=" text-start p-2">
             {edit ? (
               <Button className="btn-edit" onClick={handleSave}>
                 <FontAwesomeIcon icon="fa-solid fa-floppy-disk" />
@@ -78,7 +79,14 @@ export const CharacterHeader = ({ character, setCharacter }) => {
               </Button>
             )}
           </Col>
-        </Row>{" "}
+          <Col md={3}>
+            <PPItem
+              setter={setCharacter}
+              updater={updateCharacter}
+              character={character}
+            />
+          </Col>
+        </Row>
       </Col>
     </Row>
   );

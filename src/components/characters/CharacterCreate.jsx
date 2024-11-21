@@ -66,7 +66,7 @@ export const CharacterCreate = ({ currentUser }) => {
             userId: currentUser.id,
             name: "",
             pronouns: "",
-            plotPoints: 0,
+            plotPoints: 2,
             description: "",
             image: "",
           });

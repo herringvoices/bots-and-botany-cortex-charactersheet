@@ -288,6 +288,7 @@ export const CharacterSheet = ({ currentUser }) => {
       <CharacterHeader
         character={character}
         setCharacter={getAndSetCharacter}
+        setter={setCharacter}
       />
 
       <Accordion defaultActiveKey="0">
