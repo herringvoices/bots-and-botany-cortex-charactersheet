@@ -93,7 +93,7 @@ export const SpeciesSelect = ({
                 onChange={(evt) =>
                   setKindredDistinction({
                     ...kindredDistinction,
-                    speciesId: evt.target.value,
+                    speciesId: parseInt(evt.target.value, 10),
                   })
                 }
               >

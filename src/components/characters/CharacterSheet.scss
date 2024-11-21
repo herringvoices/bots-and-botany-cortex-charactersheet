@@ -4,7 +4,7 @@
   background: var(--primary-gradient) !important;
   margin: 0.5em;
   border-radius: 8px !important;
-  padding: 1em 0 !important;
+  padding: 1em !important;
   box-sizing: border-box !important; /* Ensure padding stays inside the element */
 }
 
@@ -134,7 +134,7 @@
   transform: scale(1.25) !important;
 }
 
-.btn-edit.active {
+.btn-edit:active {
   background-color: var(--secondary-color) !important;
   color: var(--dark-color) !important;
   border: none !important;
@@ -159,6 +159,75 @@
 .btn-plus:active {
   background-color: #00000000 !important;
   color: var(--dark-color) !important;
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+/* Dark Variant for .btn-edit */
+.btn-edit-dark {
+  background-color: var(
+    --dark-color
+  ) !important; /* Use dark color for the background */
+  color: var(--primary-color) !important; /* Use light color for the text */
+  border: none !important;
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
+}
+
+.btn-edit-dark:hover {
+  background-color: var(
+    --dark-color-transparent
+  ) !important; /* Dark color with transparency for hover effect */
+  color: var(
+    --primary-color
+  ) !important; /* Add a slight pop with primary color for hover */
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+/* Dark Variant for .btn-plus */
+.btn-plus-dark {
+  background-color: transparent !important; /* Keep transparent for a subtle look */
+  color: var(--light-color) !important; /* Light color for better contrast */
+  border: none !important;
+  font-size: 1.5em !important;
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
+}
+
+.btn-plus-dark:hover {
+  background-color: var(
+    --dark-color-transparent
+  ) !important; /* Dark color with some transparency for a subtle hover effect */
+  color: var(
+    --secondary-color
+  ) !important; /* Secondary color for an interactive feel */
+  border: none !important;
+  transform: scale(1.25) !important;
+}
+
+.plot-points {
+  font-size: 2em !important; /* Sets the size of the font */
+  color: var(
+    --primary-color
+  ) !important; /* Uses the primary color for the text */
+  background-color: var(
+    --dark-color
+  ) !important; /* Uses the dark color for the background */
+  width: 1.5em !important; /* Ensure the width and height are the same to create a circle */
+  border-radius: 50% !important; /* Makes it a perfect circle */
+  display: flex !important; /* Flex to center the text */
+  align-items: center !important; /* Vertically centers the text */
+  justify-content: center !important; /* Horizontally centers the text */
+  text-align: center !important; /* Centers text in the case of multiline (just in case) */
+  margin: 0.5em !important; /* Adds a little space around it */
+}
+
+.btn-plus-dark:active {
+  background-color: var(
+    --dark-color
+  ) !important; /* Full dark color for active state */
+  color: var(
+    --primary-color
+  ) !important; /* Primary color to emphasize active state */
   border: none !important;
   transform: scale(1.25) !important;
 }
@@ -242,4 +311,14 @@
   color: var(--dark-color) !important; // Text color for active state
   border: none !important;
   box-shadow: none !important;
+}
+
+.value-item {
+  background: var(--primary-gradient);
+  border-radius: 8px;
+}
+
+.value-description {
+  color: var(--dark-color);
+  font-size: 1.25em;
 }
