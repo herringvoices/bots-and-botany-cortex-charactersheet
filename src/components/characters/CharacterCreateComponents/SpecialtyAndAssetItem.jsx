@@ -3,14 +3,14 @@ import { Button, Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DieSize } from "../DieSize";
 
-export const SpecialtyAndAssetItem = ({
+const SpecialtyAndAssetItem = ({
   item,
   setter,
   sheet,
   pointsLeft,
-  getAndSetter,
   updater,
   deleter,
+  isNameEditable = true,
 }) => {
   // State to control edit mode and form input value
   const [edit, setEdit] = useState(false);
@@ -40,11 +40,22 @@ export const SpecialtyAndAssetItem = ({
 
   // Wrapper for handleSave function
   const onSave = () => {
-    // Prepare updated item with new name and any other updates
-    const updatedItem = {
-      ...item,
-      name,
-    };
+    let updatedItem;
+
+    if (isNameEditable) {
+      // Full update: includes the name and dieSize
+      updatedItem = {
+        ...item,
+        name,
+        dieSize: item.dieSize,
+      };
+    } else {
+      // `dieSize`-only update for attributes or similar items
+      updatedItem = {
+        ...item,
+        dieSize: item.dieSize,
+      };
+    }
 
     // Call updater function passed from the parent
     updater(updatedItem)
@@ -57,16 +68,23 @@ export const SpecialtyAndAssetItem = ({
   };
 
   // Handler to delete an item from the array
+
   const handleDelete = () => {
-    deleter(item?.id)
-      .then(() => {
-        setter((prevArray) =>
-          prevArray.filter((prevItem) => prevItem.id !== item?.id)
-        );
-      })
-      .catch((error) => {
-        console.error("Error deleting item:", error);
-      });
+    if (sheet) {
+      deleter(item?.id)
+        .then(() => {
+          setter((prevArray) =>
+            prevArray.filter((prevItem) => prevItem.id !== item?.id)
+          );
+        })
+        .catch((error) => {
+          console.error("Error deleting item:", error);
+        });
+    } else {
+      setter((prevArray) =>
+        prevArray.filter((prevItem) => prevItem.id !== item.id)
+      );
+    }
   };
 
   // Handler to update the name in state as the user types
@@ -88,7 +106,7 @@ export const SpecialtyAndAssetItem = ({
           <Row>
             {/* Edit/Save Button - always render Col, buttons are conditional */}
             <Col xs={3} className="p-2 text-center">
-              {sheet && (
+              {sheet && isNameEditable && (
                 <>
                   {edit ? (
                     <Button className="btn-edit-dark" onClick={onSave} active>
@@ -108,7 +126,7 @@ export const SpecialtyAndAssetItem = ({
 
             {/* Item Title or Editable Form */}
             <Col className="my-auto text-dark text-center" xs={6}>
-              {edit || !sheet ? (
+              {(edit && isNameEditable) || (!sheet && isNameEditable) ? (
                 <Form.Control
                   type="text"
                   value={name}
@@ -122,9 +140,11 @@ export const SpecialtyAndAssetItem = ({
 
             {/* Delete Button */}
             <Col xs={3} className="p-2">
-              <Button className="btn-edit-dark" onClick={handleDelete}>
-                <FontAwesomeIcon icon="fa-solid fa-trash-can" />
-              </Button>
+              {deleter && (
+                <Button className="btn-edit-dark" onClick={handleDelete}>
+                  <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+                </Button>
+              )}
             </Col>
           </Row>
 
@@ -166,3 +186,5 @@ export const SpecialtyAndAssetItem = ({
     </Col>
   );
 };
+
+export default SpecialtyAndAssetItem;

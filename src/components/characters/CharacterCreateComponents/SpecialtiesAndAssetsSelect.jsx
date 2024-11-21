@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Row } from "react-bootstrap";
-import { SpecialtyAndAssetItem } from "./SpecialtyAndAssetItem";
+import SpecialtyAndAssetItem from "./SpecialtyAndAssetItem";
 
 export const SpecialtiesAndAssetsSelect = ({
   array,
@@ -31,8 +31,10 @@ export const SpecialtiesAndAssetsSelect = ({
             key={item.id}
             item={item}
             setter={setter}
-            sheet={false} // Assuming default is false, can be made dynamic if needed
+            sheet={false}
             pointsLeft={pointsLeft}
+            deleter={true}
+            isNameEditable={true}
           />
         ))}
       </Row>

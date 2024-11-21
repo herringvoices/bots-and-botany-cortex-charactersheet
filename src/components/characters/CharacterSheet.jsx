@@ -30,14 +30,19 @@ import {
   updateCharacterSfx,
 } from "../../services/sfxService";
 import { SFXItem } from "./CharacterCreateComponents/SFXItem";
-import { SpecialtyAndAssetItem } from "./CharacterCreateComponents/SpecialtyAndAssetItem";
+import ComponentItem from "./CharacterCreateComponents/SpecialtyAndAssetItem";
 import {
   deleteSpecialty,
   getSpecialtiesByCharacterId,
   postSpecialty,
   updateSpecialty,
 } from "../../services/specialtiesService";
-import { getAssetsByCharacterId } from "../../services/assetsService";
+import {
+  deleteAsset,
+  getAssetsByCharacterId,
+  postAsset,
+  updateAsset,
+} from "../../services/assetsService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const CharacterSheet = ({ currentUser }) => {
@@ -399,15 +404,15 @@ export const CharacterSheet = ({ currentUser }) => {
             </Row>
             <Row>
               {specialties?.map((item) => (
-                <SpecialtyAndAssetItem
+                <ComponentItem
                   key={item.id}
                   item={item}
                   sheet={true}
-                  getAndSetter={getAndSetSpecialties}
                   setter={setSpecialties}
                   updater={updateSpecialty}
                   deleter={deleteSpecialty}
                   pointsLeft={true}
+                  isNameEditable={true}
                 />
               ))}
             </Row>
@@ -418,18 +423,31 @@ export const CharacterSheet = ({ currentUser }) => {
         <Accordion.Item eventKey="5">
           <Accordion.Header>Assets</Accordion.Header>
           <Accordion.Body className="dark-container text-center">
-            {assets?.map((item) => (
-              <SpecialtyAndAssetItem
-                key={item.id}
-                item={item}
-                sheet={true}
-                getAndSetter={getAndSetAssets}
-                setter={setAssets}
-                updater={updateSpecialty}
-                deleter={deleteSpecialty}
-                pointsLeft={true}
-              />
-            ))}
+            <Row>
+              <Col className="p-2 text-end">
+                <Button
+                  onClick={() => {
+                    addItem(postAsset, characterId);
+                  }}
+                  className="btn-edit"
+                >
+                  <FontAwesomeIcon icon="fa-solid fa-square-plus" />
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              {assets?.map((item) => (
+                <ComponentItem
+                  key={item.id}
+                  item={item}
+                  sheet={true}
+                  setter={setAssets}
+                  updater={updateAsset}
+                  deleter={deleteAsset}
+                  pointsLeft={true}
+                />
+              ))}
+            </Row>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
