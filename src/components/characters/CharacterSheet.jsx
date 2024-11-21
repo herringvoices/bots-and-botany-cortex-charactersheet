@@ -5,7 +5,7 @@ import {
   getKindredDistinctionByCharacterId,
   updateKindredDistinction,
 } from "../../services/Service";
-import { Accordion, Col, Container, Row } from "react-bootstrap";
+import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import "./CharacterSheet.scss";
 import { DistinctionItem } from "./CSComponents/DistinctionItem";
 import { ValueItem } from "./CSComponents/ValueItem";
@@ -30,6 +30,15 @@ import {
   updateCharacterSfx,
 } from "../../services/sfxService";
 import { SFXItem } from "./CharacterCreateComponents/SFXItem";
+import { SpecialtyAndAssetItem } from "./CharacterCreateComponents/SpecialtyAndAssetItem";
+import {
+  deleteSpecialty,
+  getSpecialtiesByCharacterId,
+  postSpecialty,
+  updateSpecialty,
+} from "../../services/specialtiesService";
+import { getAssetsByCharacterId } from "../../services/assetsService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const CharacterSheet = ({ currentUser }) => {
   let { characterId } = useParams();
@@ -62,6 +71,8 @@ export const CharacterSheet = ({ currentUser }) => {
   const [unlockedSFX, setUnlockedSFX] = useState([]);
   const [lockedSFX, setLockedSFX] = useState([]);
   const [SFX, setSFX] = useState([]);
+  const [specialties, setSpecialties] = useState([]);
+  const [assets, setAssets] = useState([]);
 
   // Fetch and set functions for each part of the state
   const getAndSetCharacter = async () => {
@@ -145,6 +156,24 @@ export const CharacterSheet = ({ currentUser }) => {
     }
   };
 
+  const getAndSetSpecialties = async () => {
+    try {
+      const specialties = await getSpecialtiesByCharacterId(characterId);
+      setSpecialties(specialties);
+    } catch (error) {
+      console.error("Error fetching and setting specialties:", error);
+    }
+  };
+
+  const getAndSetAssets = async () => {
+    try {
+      const assets = await getAssetsByCharacterId(characterId);
+      setAssets(assets);
+    } catch (error) {
+      console.error("Error fetching and setting assets:", error);
+    }
+  };
+
   const getAndSetSFX = async () => {
     try {
       const sfxData = await getCharacterSfxByCharacterId(characterId);
@@ -167,6 +196,8 @@ export const CharacterSheet = ({ currentUser }) => {
         getAndSetValues(),
         getAndSetAttributes(),
         getAndSetSFX(),
+        getAndSetSpecialties(),
+        getAndSetAssets(),
       ]);
     } catch (error) {
       console.error("Error in getAndSetState:", error);
@@ -203,6 +234,23 @@ export const CharacterSheet = ({ currentUser }) => {
   useEffect(() => {
     getAndSetState();
   }, [characterId]);
+
+  const addItem = (postFunction, characterId) => {
+    const newObject = {
+      name: "Enter name here",
+      dieSize: 4,
+      characterId: characterId,
+    };
+    // Calls the post function and handles the response with .then()
+    postFunction(newObject)
+      .then(() => {
+        getAndSetSpecialties();
+        getAndSetAssets();
+      })
+      .catch((error) => {
+        console.error("Error posting the item:", error);
+      });
+  };
 
   return (
     <Container as="main">
@@ -328,6 +376,58 @@ export const CharacterSheet = ({ currentUser }) => {
                 key={item.id}
                 sfx={item}
                 sheet={true}
+              />
+            ))}
+          </Accordion.Body>
+        </Accordion.Item>
+
+        {/* Specialties */}
+        <Accordion.Item eventKey="5">
+          <Accordion.Header>Specialties</Accordion.Header>
+          <Accordion.Body className="dark-container text-center">
+            <Row>
+              <Col className="p-2 text-end">
+                <Button
+                  onClick={() => {
+                    addItem(postSpecialty, characterId);
+                  }}
+                  className="btn-edit"
+                >
+                  <FontAwesomeIcon icon="fa-solid fa-square-plus" />
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              {specialties?.map((item) => (
+                <SpecialtyAndAssetItem
+                  key={item.id}
+                  item={item}
+                  sheet={true}
+                  getAndSetter={getAndSetSpecialties}
+                  setter={setSpecialties}
+                  updater={updateSpecialty}
+                  deleter={deleteSpecialty}
+                  pointsLeft={true}
+                />
+              ))}
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+
+        {/* Assets */}
+        <Accordion.Item eventKey="5">
+          <Accordion.Header>Assets</Accordion.Header>
+          <Accordion.Body className="dark-container text-center">
+            {assets?.map((item) => (
+              <SpecialtyAndAssetItem
+                key={item.id}
+                item={item}
+                sheet={true}
+                getAndSetter={getAndSetAssets}
+                setter={setAssets}
+                updater={updateSpecialty}
+                deleter={deleteSpecialty}
+                pointsLeft={true}
               />
             ))}
           </Accordion.Body>
