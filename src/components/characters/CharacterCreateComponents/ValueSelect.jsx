@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Row, Col, Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DieSize } from "../DieSize";
@@ -15,6 +15,8 @@ export const ValueSelect = ({
   pointsSpent,
   setPointsSpent,
 }) => {
+  const [show, setShow] = useState(false);
+
   // Effect: Update characterValues based on modifiedValues and pointsSpent
   useEffect(() => {
     const updatedCharacterValues = values.map((value) => {
@@ -90,11 +92,84 @@ export const ValueSelect = ({
 
   return (
     <>
-      {/* Header Section */}
-      <Row>
+      {/* Modal for Value Points Information */}
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Value Points</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Value Points</h4>
+          <p>
+            You should have accumulated a number of value points already, but
+            you now have <strong>4 points</strong> to use to step up any values
+            you'd like.
+          </p>
+          <p>
+            Later, when viewing your character's character sheet, you'll be able
+            to come up with a single sentence that defines what that value means
+            for your character.
+          </p>
+          <div className="dark-container p-1 m-1">
+            <h5>Devotion</h5>
+            <p>
+              Have you ever been obligated to others? This value is about duty,
+              faith, and friendship. You’re motivated by the bonds of loyalty
+              and your love for others.
+            </p>
+          </div>
+          <div className="dark-container p-1 m-1">
+            <h5>Glory</h5>
+            <p>
+              Have you ever wanted to be celebrated by history? This value is
+              about legacy, fame, and fortune. You’re motivated by praise,
+              acclaim, and your desire to be remembered.
+            </p>
+          </div>
+          <div className="dark-container p-1 m-1">
+            <h5>Liberty</h5>
+            <p>
+              Have you ever resisted the control of others? This value is about
+              freedom, independence, and autonomy. You’re motivated by a world
+              without oppression or suppression.
+            </p>
+          </div>
+          <div className="dark-container p-1 m-1">
+            <h5>Mastery</h5>
+            <p>
+              Have you ever needed to rise above your own limits? This value is
+              about control, achievement, and skill. You’re motivated by power,
+              growth, and self-development.
+            </p>
+          </div>
+          <div className="dark-container p-1 m-1">
+            <h5>Justice</h5>
+            <p>
+              Have you ever been compelled to fix what’s wrong? This value is
+              about balance, righteousness, and reward. You’re motivated by
+              adherence to fairness and what you think is right.
+            </p>
+          </div>
+          <div className="dark-container p-1 m-1">
+            <h5>Truth</h5>
+            <p>
+              Have you ever sought out all the answers? This value is about
+              fidelity, certainty, and authenticity. You’re motivated by finding
+              strength in facts and by the principle and pursuit of knowledge.
+            </p>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* Header Section with Button to Trigger Modal */}
+      <Row className="align-items-center">
         <Col>
           <h2>Allocate Value Points</h2>
           <p>Points Available: {pointsAvailable}</p>
+        </Col>
+        <Col xs="auto">
+          <Button className="btn-edit" onClick={() => setShow(true)}>
+            <FontAwesomeIcon icon="fa-solid fa-question" />
+          </Button>
         </Col>
       </Row>
 

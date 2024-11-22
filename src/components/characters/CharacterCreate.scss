@@ -52,3 +52,13 @@
 .secondary-span {
   color: var(--secondary-color);
 }
+
+.modal-content {
+  background-color: var(--dark-color-transparent) !important;
+  border: var(--primary-color) solid !important;
+  box-shadow: 0 0 10px var(--primary-color) !important;
+}
+
+.modal-header {
+  border-bottom: var(--primary-color) solid !important;
+}
