@@ -6,6 +6,7 @@ import { CharacterList } from "../components/characters/CharacterList";
 import { CharacterSheet } from "../components/characters/CharacterSheet";
 import { CharacterCreate } from "../components/characters/CharacterCreate";
 import { Welcome } from "../components/welcome/Welcome";
+import RulesPage from "../components/rules/GameRules";
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -15,6 +16,7 @@ export const ApplicationViews = () => {
     const localUserObject = JSON.parse(localUser);
     setCurrentUser(localUserObject);
   }, []);
+
   return (
     <Routes>
       <Route
@@ -23,14 +25,13 @@ export const ApplicationViews = () => {
           <>
             <NavBar />
             <Outlet />
-            {/* Outlet will render the index route or other nested routes */}
           </>
         }
       >
         {/* Index route for the home page */}
         <Route index element={<Welcome />} />
 
-        {/* Other nested routes */}
+        {/* Characters routes */}
         <Route path="characters/view">
           <Route index element={<CharacterList currentUser={currentUser} />} />
           <Route
@@ -46,6 +47,9 @@ export const ApplicationViews = () => {
           path="characters/edit/:characterId"
           element={<CharacterCreate currentUser={currentUser} />}
         />
+
+        {/* Rules page route */}
+        <Route path="rules" element={<RulesPage />} />
       </Route>
     </Routes>
   );

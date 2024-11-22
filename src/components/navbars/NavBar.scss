@@ -21,12 +21,16 @@
 
 .dropdown-toggle {
   color: var(--primary-color) !important;
+  display: block !important; /* Or block */
+  margin: 0 10px;
 }
 
 .dropdown-menu {
-  background: var(--secondary-gradient-transparent) !important;
+  background: var(--secondary-gradient) !important;
+  opacity: 0.9;
   box-shadow: 0 0 10px var(--primary-color) !important;
   font-size: 1.5rem;
+  margin-top: 8px !important;
 }
 
 .dropdown-item {
