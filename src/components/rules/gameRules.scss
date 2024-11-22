@@ -1,0 +1,85 @@
+@import "../../variables";
+
+.btn-rules {
+  box-shadow: 0 0 10px var(--primary-color) !important;
+}
+
+.rules-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  background: var(--primary-gradient) !important;
+  color: var(--dark-color) !important;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--secondary-color) !important;
+}
+
+.rules-nav > * {
+  color: var(--dark-color) !important;
+  background-color: #00000000 !important;
+  text-shadow: 0 0 10px var(--primary-color) !important;
+}
+
+.rules-nav .nav-link {
+  display: block; /* Ensures full width */
+  width: 100%; /* Forces full-width links */
+  margin-bottom: 0.5rem; /* Adds consistent spacing */
+}
+
+/* Left Column Styles */
+.toggle-column {
+  background-color: #00000000; /* Dark background for the left column */
+  color: var(--primary-color);
+  position: sticky;
+  top: 0;
+}
+
+/* Toggle Button */
+.toggle-button {
+  background-color: #12f1d3;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.toggle-button:hover {
+  background-color: #0faab0;
+}
+
+.rules-content h3 {
+  margin-top: 20px;
+  border: var(--primary-color) solid 1px;
+  padding: 5px;
+  box-shadow: 0 0 10px var(--primary-color) !important;
+
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  opacity: 0.9;
+}
+
+.rules-content li {
+  margin: 5px 50px;
+}
+
+.offcanvas .nav-link {
+  display: inline-block !important;
+  font-size: 0.85em !important;
+  transition: transform 0.3s ease, background 0.3s ease !important;
+  margin-left: 10px;
+}
+
+.offcanvas .nav-link:hover {
+  transform: scale(1.1) !important;
+  text-shadow: 0 0 10px var(--primary-color) !important;
+}
+
+.sticky-top {
+  z-index: 100 !important; /* Ensure this is lower than Bootstrap dropdown z-index */
+}
+
+.dropdown-menu {
+  z-index: 1050 !important; /* Bootstrap default for dropdown menus */
+}

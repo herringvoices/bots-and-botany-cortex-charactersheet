@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Col, Form, Image } from "react-bootstrap";
+import {
+  Accordion,
+  Button,
+  Col,
+  Form,
+  Image,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import {
   getSFX,
   getSpecies,
   getSpeciesSFX,
   getValues,
 } from "../../../services/Service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const SpeciesSelect = ({
   kindredDistinction,
@@ -22,6 +31,7 @@ export const SpeciesSelect = ({
   const [speciesSfx, setSpeciesSfx] = useState([]);
   const [selectedSpeciesSfx, setSelectedSpeciesSfx] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
+  const [show, setShow] = useState(false);
 
   // Fetch species, sfx, and speciesSfx once when the component mounts.
   useEffect(() => {
@@ -83,6 +93,38 @@ export const SpeciesSelect = ({
 
   return (
     <>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Rules and Information</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Distinctions</h4>
+          <p>
+            Distinctions (Kindred, Vocation, and Quirk) all start at a d8. They
+            represent your character's background: where they come from, what
+            they do, and what quirk makes them unique.
+          </p>
+          <h4>Kindred Distinction</h4>
+          <h5>Species</h5>
+          <p>
+            Step 1: Choose your <strong>species</strong>, then your{" "}
+            <strong>background</strong>. These will combine into your{" "}
+            <strong>Kindred Distinction</strong>, such as "Cityfolk Amorf." Step
+            up the associated <strong>Values</strong> by one.
+          </p>
+        </Modal.Body>
+      </Modal>
+
+      <Row className="align-items-center">
+        <Col>
+          <h1>Species Selection</h1>
+        </Col>
+        <Col xs="auto">
+          <Button className="btn-edit" onClick={() => setShow(true)}>
+            <FontAwesomeIcon icon="fa-solid fa-question" />
+          </Button>
+        </Col>
+      </Row>
       <Col md={{ span: 4 }} className="select-column">
         <div className="mt-3 mb-3">
           <Form>

@@ -28,7 +28,6 @@ export const handleProfilePictureUpload = async (file) => {
 
     return data.secure_url;
   } catch (error) {
-    console.error("Upload failed:", error);
     throw error;
   }
 };

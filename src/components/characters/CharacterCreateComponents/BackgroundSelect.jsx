@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Form, Image } from "react-bootstrap";
+import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import {
   getSFX,
   getBackground,
   getBackgroundSFX,
 } from "../../../services/Service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const BackgroundSelect = ({
   kindredDistinction,
@@ -19,6 +20,7 @@ export const BackgroundSelect = ({
   const [backgroundSfx, setBackgroundSfx] = useState([]);
   const [selectedBackgroundSfx, setSelectedBackgroundSfx] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
+  const [show, setShow] = useState(false);
 
   // Fetch background, sfx, and backgroundSfx once when the component mounts.
   useEffect(() => {
@@ -75,6 +77,42 @@ export const BackgroundSelect = ({
 
   return (
     <>
+      {/* Modal for Rules and Information */}
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Rules and Information</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Distinctions</h4>
+          <p>
+            Distinctions (Kindred, Vocation, and Quirk) all start at a d8. They
+            represent your character's background: where they come from, what
+            they do, and what quirk makes them unique.
+          </p>
+          <h4>Kindred Distinction</h4>
+          <h5>Background</h5>
+          <p>
+            Step 1: Choose your <strong>species</strong>, then your{" "}
+            <strong>background</strong>. These will combine into your{" "}
+            <strong>Kindred Distinction</strong>, such as "Cityfolk Amorf." Step
+            up the associated <strong>Values</strong> by one.
+          </p>
+        </Modal.Body>
+      </Modal>
+
+      {/* Header Row with Modal Trigger Button */}
+      <Row className="align-items-center">
+        <Col>
+          <h1>Background Selection</h1>
+        </Col>
+        <Col xs="auto">
+          <Button className="btn-edit" onClick={() => setShow(true)}>
+            <FontAwesomeIcon icon="fa-solid fa-question" />
+          </Button>
+        </Col>
+      </Row>
+
+      {/* Background Selection Form */}
       <Col md={{ span: 4 }} className="select-column">
         <div className="mt-3 mb-3">
           <Form>
@@ -114,6 +152,8 @@ export const BackgroundSelect = ({
           )}
         </div>
       </Col>
+
+      {/* Background Description */}
       {selectedBackground ? (
         <Col md={{ span: 4 }} className="select-column">
           <div className="mt-3 mb-3">
@@ -124,6 +164,8 @@ export const BackgroundSelect = ({
       ) : (
         ""
       )}
+
+      {/* SFX and Value Information */}
       {selectedBackground ? (
         <Col md={{ span: 4 }} className="select-column">
           <div className="mt-3 mb-3">

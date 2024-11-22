@@ -1,0 +1,27 @@
+@import "../../variables";
+
+.card {
+  background-color: var(--dark-color-transparent) !important;
+  color: var(--primary-color) !important;
+  border-radius: 8px;
+  border: 0 !important;
+
+  box-shadow: 0 0 10px var(--primary-color) !important;
+}
+
+.card-title {
+  font-size: 2em !important;
+  text-shadow: 0 0 5px var(--primary-color) !important;
+}
+
+.species-info h4 {
+  margin-top: 20px;
+  border: var(--primary-color) solid 1px;
+  padding: 5px;
+  box-shadow: 0 0 10px var(--primary-color) !important;
+
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  opacity: 0.9;
+}
