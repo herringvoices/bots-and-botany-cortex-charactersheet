@@ -53,6 +53,7 @@
   border: var(--primary-color) solid 1px;
   padding: 5px;
   box-shadow: 0 0 10px var(--primary-color) !important;
+
   border-radius: 8px;
   background-color: var(--primary-color);
   color: var(--dark-color);
@@ -73,4 +74,12 @@
 .offcanvas .nav-link:hover {
   transform: scale(1.1) !important;
   text-shadow: 0 0 10px var(--primary-color) !important;
+}
+
+.sticky-top {
+  z-index: 100 !important; /* Ensure this is lower than Bootstrap dropdown z-index */
+}
+
+.dropdown-menu {
+  z-index: 1050 !important; /* Bootstrap default for dropdown menus */
 }

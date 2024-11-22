@@ -158,6 +158,164 @@ export const NavBar = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
 
+                {/* Technology Dropdown */}
+                <NavDropdown
+                  title="Technology"
+                  id="technology-dropdown"
+                  bg="dark"
+                >
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology"
+                    onClick={handleClose}
+                  >
+                    Overview
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#hub-system"
+                    onClick={handleClose}
+                  >
+                    Hub System
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#nanites"
+                    onClick={handleClose}
+                  >
+                    Nanites
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#hardware-software"
+                    onClick={handleClose}
+                  >
+                    Hardware and Software
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#translation-software"
+                    onClick={handleClose}
+                  >
+                    Translation Software
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#cloud-computing"
+                    onClick={handleClose}
+                  >
+                    Cloud Computing and Ether
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#skill-pills"
+                    onClick={handleClose}
+                  >
+                    Skill Pills
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#perks"
+                    onClick={handleClose}
+                  >
+                    Perks
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#grav-drive"
+                    onClick={handleClose}
+                  >
+                    Grav-Drive
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#e-gates"
+                    onClick={handleClose}
+                  >
+                    E-Gates
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#limited-intelligences"
+                    onClick={handleClose}
+                  >
+                    Limited Intelligences (LIs)
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#medical-nanites"
+                    onClick={handleClose}
+                  >
+                    Medical and Utility Nanites
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/technology#weaponry-defense"
+                    onClick={handleClose}
+                  >
+                    Weaponry and Defense
+                  </NavDropdown.Item>
+                </NavDropdown>
+                {/* Species Info dropdown */}
+                <NavDropdown title="Species" id="species-dropdown" bg="dark">
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/amorf"
+                    onClick={handleClose}
+                  >
+                    Amorf
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/avia"
+                    onClick={handleClose}
+                  >
+                    Avia
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/calxis"
+                    onClick={handleClose}
+                  >
+                    Calxis
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/feararc"
+                    onClick={handleClose}
+                  >
+                    Feararc
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/flora"
+                    onClick={handleClose}
+                  >
+                    Flora (Stock)
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/humans"
+                    onClick={handleClose}
+                  >
+                    Humans
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/machina"
+                    onClick={handleClose}
+                  >
+                    Machina
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/species/vearin"
+                    onClick={handleClose}
+                  >
+                    Vearin
+                  </NavDropdown.Item>
+                </NavDropdown>
+
                 {/* Logout Link - Positioned at the End */}
                 {isLoggedIn && (
                   <Nav.Item className="ms-auto">

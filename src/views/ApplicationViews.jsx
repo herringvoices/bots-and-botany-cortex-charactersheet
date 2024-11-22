@@ -1,12 +1,13 @@
 import { Routes, Route, Outlet } from "react-router-dom";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { NavBar } from "../components/navbars/NavBar";
 import { CharacterList } from "../components/characters/CharacterList";
 import { CharacterSheet } from "../components/characters/CharacterSheet";
 import { CharacterCreate } from "../components/characters/CharacterCreate";
 import { Welcome } from "../components/welcome/Welcome";
 import RulesPage from "../components/rules/GameRules";
+import TechnologyPage from "../components/rules/TechnologyInfo";
+import SpeciesPage from "../components/species/SpeciesPage"; // Import the SpeciesPage component
 
 export const ApplicationViews = () => {
   const [currentUser, setCurrentUser] = useState({});
@@ -50,6 +51,12 @@ export const ApplicationViews = () => {
 
         {/* Rules page route */}
         <Route path="rules" element={<RulesPage />} />
+
+        {/* Technology page route */}
+        <Route path="technology" element={<TechnologyPage />} />
+
+        {/* Species routes */}
+        <Route path="species/:speciesName" element={<SpeciesPage />} />
       </Route>
     </Routes>
   );
