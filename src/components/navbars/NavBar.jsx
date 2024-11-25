@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Navbar,
   Nav,
@@ -8,15 +8,29 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../views/UserContext"; // Access UserContext for authentication state
+import { auth } from "../../firebase-config"; // Import Firebase auth
+import { signOut } from "firebase/auth"; // Firebase sign-out function
 import "./NavBar.scss";
 
 export const NavBar = () => {
-  const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("bnb_user");
+  const { user, logout } = useContext(UserContext); // Access user and logout function
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Firebase logout
+      logout(); // Clear user from context
+      handleClose(); // Close the Offcanvas
+      navigate("/login"); // Redirect to login page
+    } catch (error) {
+      console.error("Error during logout:", error.message); // Log any errors
+    }
+  };
 
   return (
     <>
@@ -316,22 +330,30 @@ export const NavBar = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
 
-                {/* Logout Link - Positioned at the End */}
-                {isLoggedIn && (
-                  <Nav.Item className="ms-auto">
-                    <Nav.Link
-                      as={Link}
-                      to="/"
-                      onClick={() => {
-                        localStorage.removeItem("bnb_user");
-                        handleClose();
-                        navigate("/", { replace: true });
-                      }}
-                      className="navbar-link"
-                    >
-                      Logout
-                    </Nav.Link>
-                  </Nav.Item>
+                {/* User Actions */}
+                {user ? (
+                  <>
+                    {/* Display username */}
+                    <Nav.Item className="ms-auto">
+                      <span className=" me-3">Welcome, {user.username}!</span>
+                    </Nav.Item>
+                    {/* Logout Link */}
+                    <Nav.Item>
+                      <Nav.Link
+                        as="button"
+                        onClick={() => {
+                          logout(); // Call the logout function from UserContext
+                          handleClose();
+                          navigate("/", { replace: true });
+                        }}
+                        className="navbar-link"
+                      >
+                        Logout
+                      </Nav.Link>
+                    </Nav.Item>
+                  </>
+                ) : (
+                  ""
                 )}
               </Nav>
             </Offcanvas.Body>
