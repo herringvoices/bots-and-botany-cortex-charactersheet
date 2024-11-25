@@ -1,17 +1,17 @@
 import { Navigate, useLocation } from "react-router-dom";
-import React from "react";
-
-// We can access child components the same way we access props. Child components are passed to our props as a key/value pair where
-// children is the key.
+import React, { useContext } from "react";
+import { UserContext } from "./UserContext"; // Import the context to access user state
 
 export const Authorized = ({ children }) => {
   let location = useLocation();
+  const { user } = useContext(UserContext); // Access the logged-in user from UserContext
 
-  // Check if user is logged in. If they are, render the CHILD components (in this case, the ApplicationViews component)
-  if (localStorage.getItem("bnb_user")) {
+  // If the user is logged in, render the child components
+  if (user) {
     return children;
   }
-  // If the user is NOT logged in, redirect them to the login page using the Navigate component from react-router-dom
+
+  // If the user is NOT logged in, redirect them to the login page
   else {
     return <Navigate to={`/login`} state={{ from: location }} replace />;
   }
