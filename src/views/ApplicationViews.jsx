@@ -1,5 +1,5 @@
 import { Routes, Route, Outlet } from "react-router-dom";
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { NavBar } from "../components/navbars/NavBar";
 import { CharacterList } from "../components/characters/CharacterList";
 import { CharacterSheet } from "../components/characters/CharacterSheet";
@@ -8,10 +8,15 @@ import { Welcome } from "../components/welcome/Welcome";
 import RulesPage from "../components/rules/GameRules";
 import TechnologyPage from "../components/rules/TechnologyInfo";
 import SpeciesPage from "../components/species/SpeciesPage"; // Import the SpeciesPage component
-import { UserContext } from "./UserContext"; // Import UserContext for global user state
 
 export const ApplicationViews = () => {
-  const { user } = useContext(UserContext); // Access user state from UserContext
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    const localUser = localStorage.getItem("bnb_user");
+    const localUserObject = JSON.parse(localUser);
+    setCurrentUser(localUserObject);
+  }, []);
 
   return (
     <Routes>
@@ -29,19 +34,19 @@ export const ApplicationViews = () => {
 
         {/* Characters routes */}
         <Route path="characters/view">
-          <Route index element={<CharacterList currentUser={user} />} />
+          <Route index element={<CharacterList currentUser={currentUser} />} />
           <Route
             path=":characterId"
-            element={<CharacterSheet currentUser={user} />}
+            element={<CharacterSheet currentUser={currentUser} />}
           />
         </Route>
         <Route
           path="characters/create"
-          element={<CharacterCreate currentUser={user} />}
+          element={<CharacterCreate currentUser={currentUser} />}
         />
         <Route
           path="characters/edit/:characterId"
-          element={<CharacterCreate currentUser={user} />}
+          element={<CharacterCreate currentUser={currentUser} />}
         />
 
         {/* Rules page route */}
