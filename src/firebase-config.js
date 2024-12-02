@@ -1,25 +1,24 @@
 // Import the functions you need from the SDKs
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth"; // Import getAuth for authentication
 import { getAnalytics } from "firebase/analytics";
 
-// Firebase configuration using environment variables (Vite uses import.meta.env)
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyATMQMPBLEqdO9RBlUsVP4gMHFO7RanvDg",
+  authDomain: "bots-and-botany-sheet.firebaseapp.com",
+  projectId: "bots-and-botany-sheet",
+  storageBucket: "bots-and-botany-sheet.firebasestorage.app",
+  messagingSenderId: "600941946831",
+  appId: "1:600941946831:web:36bab88d7637c6ac6454ba",
+  measurementId: "G-2087J89E67",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication and export it
 export const auth = getAuth(app);
 
-// Optional: Safely initialize analytics (only in browser)
-let analytics;
-if (typeof window !== "undefined") {
-  analytics = getAnalytics(app);
-}
+// Initialize Analytics (optional)
+const analytics = getAnalytics(app);
