@@ -6,7 +6,7 @@ import { updateCharacter } from "../../../services/Service";
 import PPItem from "./PPItem";
 import { handleProfilePictureUpload } from "../../../services/cloudinaryService";
 
-export const CharacterHeader = ({ character, setCharacter }) => {
+export const CharacterHeader = ({ character, setCharacter, getAndSet }) => {
   const [edit, setEdit] = useState(false);
   const [imageSelected, setImageSelected] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,7 +52,7 @@ export const CharacterHeader = ({ character, setCharacter }) => {
   const handleSave = () => {
     updateCharacter(character)
       .then((updatedCharacter) => {
-        setCharacter(updatedCharacter); // Update state with the new character data
+        getAndSet(updatedCharacter); // Update state with the new character data
         setEdit(false); // Toggle edit mode off
       })
       .catch((error) => {

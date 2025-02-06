@@ -291,8 +291,8 @@ export const CharacterSheet = ({ currentUser }) => {
     <Container as="main">
       <CharacterHeader
         character={character}
-        setCharacter={getAndSetCharacter}
-        setter={setCharacter}
+        getAndSet={getAndSetCharacter}
+        setCharacter={setCharacter}
       />
 
       <Accordion defaultActiveKey="0">
